@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="POST" action="/">
+	{{ form.csrf_token }}
+	<h3 class="pull-left">New Snippet</h3>
+	<div class="form-goup pull-right">
+	{{ form.title(placeholder="Enter title here...") }}
+	</div>
+	{{ form.snippet(class="snippet_form", placeholder="Paste your snippet here...") }}
+	<input type="submit" value="Submit" class="btn btn-default pull-right">
+</form>
+{% endblock %}

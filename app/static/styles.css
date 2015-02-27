@@ -1,0 +1,13 @@
+.snippet_form {
+	max-width: 100%;
+	min-width: 100%;
+	height: 400px;
+}
+.container {
+	max-width: 1000px;
+}
+input#title {
+	width: 500px;
+	margin-top: 20px;
+}
+
