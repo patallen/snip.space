@@ -1,5 +1,8 @@
 from app import db
 import datetime
+from hashids import Hashids
+
+hashids = Hashids(salt="I love 3 women")
 
 class Snippet(db.Model):
     __tablename__ = 'snippet'
@@ -13,3 +16,8 @@ class Snippet(db.Model):
         self.title = title
         self.body = body
         self.date_added = datetime.datetime.utcnow()
+
+    def get_uuid(self):
+        hash_id = hashids.encode(self.id)
+        return hash_id
+

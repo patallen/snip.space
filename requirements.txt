@@ -6,4 +6,5 @@ MarkupSafe==0.23
 SQLAlchemy==0.9.8
 WTForms==2.0.2
 Werkzeug==0.10.1
+hashids==1.0.3
 itsdangerous==0.24
