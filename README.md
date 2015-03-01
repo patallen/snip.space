@@ -8,7 +8,11 @@ A user-based snippet/text respository. Keep track of and share all of your rando
 4. To run server: `python run.py`
 
 ## TODO:
-- [ ] Create database and models
+- [x] Create Snippet model
+- [ ] Create User model
+- [x] Implement UUID functionality
 - [ ] Implement user sign-up w/ password hashing
-- [ ] Create 'add snippet' page.
+- [x] Create 'add snippet' page.
+- [x] Create 'view snippet' page.
+- [ ] Prettify pages
 
