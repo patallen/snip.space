@@ -10,4 +10,7 @@ input#title {
 	width: 500px;
 	margin-top: 20px;
 }
+.main {
+	background: url("http://subtlepatterns.com/patterns/concrete_seamless.png") !important;
+}
 

@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 {{ snippet.title }}
+<a href="r">Raw Text</a> | <a href="d">Download</a> |  <a href="/report/{{ snippet.get_uuid() }}">Report</a> 
 <textarea readonly class="snippet_form">{{ snippet.body }}</textarea>
+Share your snippet: http://snipstr.io/{{ snippet.get_uuid() }}
 {% endblock %}

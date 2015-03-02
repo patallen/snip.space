@@ -19,8 +19,15 @@ def index():
     return render_template('index.html', form=snippet_form)
 
 
-@app.route('/<snippet_id>/')
+@app.route('/<path:snippet_id>/')
 def show_snippet(snippet_id):
+    print(snippet_id)
     decoded_id = hashids.decode(snippet_id)[0]
     snippet = Snippet.query.get(decoded_id)
-    return render_template('snippet.html', snippet=snippet)
+    return render_template('snippet.html', snippet=snippet) 
+
+@app.route('/<snippet_id>/r')
+def raw_snippet(snippet_id):
+    decoded_id = hashids.decode(snippet_id)[0]
+    snippet = Snippet.query.get(decoded_id)
+    return render_template('raw.html', snippet=snippet)
