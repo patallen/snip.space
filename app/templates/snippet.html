@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
 {{ snippet.title }}
-<a href="r">Raw Text</a> | <a href="d">Download</a> |  <a href="/report/{{ snippet.get_uuid() }}">Report</a> 
-<textarea readonly class="snippet_form">{{ snippet.body }}</textarea>
-Share your snippet: http://snipstr.io/{{ snippet.get_uuid() }}
+	<div class="snippet-options pull-right">
+		<a href="r">Raw Text</a> | <a href="d">Download</a> |  <a href="/report/{{ snippet.get_uuid() }}">Report</a> 
+	</div>
+	<textarea readonly class="snippet_form">{{ snippet.body }}</textarea>
+	<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> New Snippet</a>
+	<div class="pull-right">Share your snippet: <input type="text" value="http://snipstr.io/{{ snippet.get_uuid() }}"></input></div>
 {% endblock %}

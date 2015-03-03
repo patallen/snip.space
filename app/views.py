@@ -26,6 +26,7 @@ def show_snippet(snippet_id):
     snippet = Snippet.query.get(decoded_id)
     return render_template('snippet.html', snippet=snippet) 
 
+
 @app.route('/<snippet_id>/r')
 def raw_snippet(snippet_id):
     decoded_id = hashids.decode(snippet_id)[0]
