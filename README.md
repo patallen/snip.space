@@ -14,7 +14,7 @@ A user-based snippet/text respository. Keep track of and share all of your rando
 - [ ] Implement PostgreSQL Database
 - [ ] Prettify pages
 - [ ] Statistics page
-- [x] Implement UUID functionality
+- [ ] Implement UUID functionality
 - [x] Create 'add snippet' page.
 - [x] Create 'view snippet' page.
 - [x] Create Snippet model
