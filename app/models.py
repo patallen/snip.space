@@ -26,7 +26,6 @@ class User(db.Model):
     username = db.Column(db.String(30), unique=True)
     email = db.Column(db.String(60), unique=True)
     first_name = db.Column(db.String(30))
-    _password_salt = db.Column(db.String)
     _password_hash = db.Column(db.String)
 
     @hybrid_property
@@ -35,8 +34,8 @@ class User(db.Model):
 
     @password.setter
     def _set_pass(self, password):
-        self._password_salt = bcrypt.gensalt()
-        self._password_hash = bcrypt.hashpw(password, self._password_salt)
+        password_salt = bcrypt.gensalt()
+        self._password_hash = bcrypt.hashpw(password, password_salt)
 
     def validate_pass(self, password):
         return bcrypt.hashpw(password.encode('utf-8'),
