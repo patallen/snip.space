@@ -2,16 +2,56 @@
 {% block content %}
 <form method="POST" action="/signup/">
 	{{ form.csrf_token }}
-	{{ form.email.label }}:
-	{{ form.email(placeholder="email address") }}<br>
-	{{ form.username.label }}:
-	{{ form.username(placeholder="enter username") }}<br>
-	{{ form.first_name.label }}:
-	{{ form.first_name(placeholder="enter first name") }}<br>
-	{{ form.password.label }}:
-	{{ form.password(placeholder="enter password") }}<br>
-	{{ form.confirm.label }}:
-	{{ form.confirm(placeholder="confirm password") }}<br>
-	<input type="submit" value="Submit" class="btn btn-default">
+
+	<div class="container-page">
+		<div class="col-md-6">
+
+			<div class="form-group col-lg-12">
+			{{ form.username.label }}:
+			{% for error in form.username.errors %}
+				<span class="alert-warning">
+				{{ error }}
+				</span>
+			{% endfor %}
+			<br>
+			{{ form.username(class="form-control", placeholder="enter username") }}
+			</div>
+
+			<div class="form-group col-lg-12">
+			{{ form.email.label }}:
+			{% for error in form.email.errors %}
+				<span class="alert-warning">
+				{{ error }}
+				</span>
+			{% endfor %}
+			<br>
+			{{ form.email(class="form-control", placeholder="email address") }}
+			</div>
+
+			{% for error in form.password.errors %}
+				<div class="form-group col-lg-12">
+				<span class="alert-warning">
+				{{ error }}
+				</span>
+				</div>
+			{% endfor %}
+
+			<div class="form-group col-lg-6">
+			{{ form.password.label }}:
+			
+			<br>
+			{{ form.password(class="form-control", placeholder="enter password") }}
+			</div>
+
+			<div class="form-group col-lg-6">
+			{{ form.confirm.label }}:<br>
+			{{ form.confirm(class="form-control", placeholder="confirm password") }}
+			</div>
+
+			<div class="form-group col-lg-12">
+				<input type="submit" value="Submit" class="btn btn-default">
+			</div>
+		</div>
+	</div>
 </form>
 {% endblock %}

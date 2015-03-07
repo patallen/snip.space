@@ -29,7 +29,7 @@ class User(db.Model):
     username = db.Column(db.String(30), unique=True)
     email = db.Column(db.String(60), unique=True)
     first_name = db.Column(db.String(30))
-    last_name = db.Column(db.String(30), default="")
+    last_name = db.Column(db.String(30))
     authenticated = db.Column(db.Boolean, default=False)
     active = db.Column(db.Boolean, default=True)
     join_date = db.Column(db.DateTime, nullable=False)
@@ -54,9 +54,8 @@ class User(db.Model):
     def is_authenticated(self):
         return self.authenticated
 
-    def __init__(self, username, email, first_name, password):
+    def __init__(self, username, email, password):
         self.password = password.encode('utf-8')
         self.username = username
         self.email = email
-        self.first_name = first_name
         self.join_date = datetime.datetime.utcnow()

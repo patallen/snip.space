@@ -41,7 +41,7 @@ def signup():
     signup_form = SignupForm()
     if signup_form.validate_on_submit():
         u = User(signup_form.username.data, signup_form.email.data,
-                 signup_form.first_name.data, signup_form.password.data)
+                 signup_form.password.data)
         db.session.add(u)
         db.session.commit()
         return redirect('/')
