@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="POST" action="/signup/">
+	{{ form.csrf_token }}
+	{{ form.email.label }}:
+	{{ form.email(placeholder="email address") }}<br>
+	{{ form.username.label }}:
+	{{ form.username(placeholder="enter username") }}<br>
+	{{ form.first_name.label }}:
+	{{ form.first_name(placeholder="enter first name") }}<br>
+	{{ form.password.label }}:
+	{{ form.password(placeholder="enter password") }}<br>
+	{{ form.confirm.label }}:
+	{{ form.confirm(placeholder="confirm password") }}<br>
+	<input type="submit" value="Submit" class="btn btn-default">
+</form>
+{% endblock %}

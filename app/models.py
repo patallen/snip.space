@@ -18,6 +18,9 @@ class Snippet(db.Model):
         self.body = body
         self.date_added = datetime.datetime.utcnow()
 
+    def __repr__(self):
+        return '<ID: {}>'.format(self.id)
+
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -26,6 +29,10 @@ class User(db.Model):
     username = db.Column(db.String(30), unique=True)
     email = db.Column(db.String(60), unique=True)
     first_name = db.Column(db.String(30))
+    last_name = db.Column(db.String(30), default="")
+    authenticated = db.Column(db.Boolean, default=False)
+    active = db.Column(db.Boolean, default=True)
+    join_date = db.Column(db.DateTime, nullable=False)
     _password_hash = db.Column(db.String)
 
     @hybrid_property
@@ -41,8 +48,15 @@ class User(db.Model):
         return bcrypt.hashpw(password.encode('utf-8'),
                              self._password_hash) == self._password_hash
 
+    def is_active(self):
+        return self.active
+
+    def is_authenticated(self):
+        return self.authenticated
+
     def __init__(self, username, email, first_name, password):
         self.password = password.encode('utf-8')
         self.username = username
         self.email = email
         self.first_name = first_name
+        self.join_date = datetime.datetime.utcnow()
