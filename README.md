@@ -8,12 +8,16 @@ A user-based snippet/text respository. Keep track of and share all of your rando
 4. To run server: `python run.py`
 
 ## TODO:
+- [ ] Flask-login for sessions
+- [ ] Member pages
+- [ ] Private snippets
+- [ ] Implement PostgreSQL Database
+- [ ] Prettify pages
+- [ ] Statistics page
 - [x] Implement UUID functionality
 - [x] Create 'add snippet' page.
 - [x] Create 'view snippet' page.
 - [x] Create Snippet model
-- [ ] Create User model
-- [ ] Implement user sign-up w/ password hashing
-- [ ] Implement PostgreSQL Database
-- [ ] Prettify pages
+- [x] Create User model
+- [x] Implement user sign-up w/ password hashing
 
