@@ -1,7 +1,13 @@
 from flask import render_template, redirect, url_for
-from app import app, db
-from app.forms import SnippetForm, SignupForm
+from flask.ext.login import login_user, logout_user, current_user
+from app import app, db, login_manager
+from app.forms import SnippetForm, SignupForm, LoginForm
 from app.models import Snippet, User
+
+
+@login_manager.user_loader
+def load_user(id):
+    return User.query.get(int(id))
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -9,6 +15,8 @@ def index():
     snippet_form = SnippetForm()
     if snippet_form.validate_on_submit():
         s = Snippet(snippet_form.title.data, snippet_form.snippet.data)
+        if not current_user.is_anonymous():
+            s.user_id = current_user.id
         db.session.add(s)
         db.session.commit()
         snippet_id = s.id
@@ -46,3 +54,23 @@ def signup():
         db.session.commit()
         return redirect('/')
     return render_template('signup.html', form=signup_form)
+
+
+@app.route('/login/', methods=['POST', 'GET'])
+def login():
+    login_form = LoginForm()
+
+    if login_form.validate_on_submit():
+        username = login_form.username.data
+        password = login_form.password.data
+        registered_user = User.query.filter_by(username=username).first()
+        if registered_user and registered_user.validate_pass(password):
+            login_user(registered_user)
+        return redirect('/')
+
+    return render_template('login.html', form=login_form)
+
+@app.route('/logout/')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))

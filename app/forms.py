@@ -20,3 +20,7 @@ class SignupForm(Form):
     username = StringField('Username', validators=[DataRequired(), unique_username])
     password = PasswordField('Password', validators=[DataRequired(), EqualTo('confirm', message='Passwords must mach.')])
     confirm = PasswordField('Confirm Password')
+
+class LoginForm(Form):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])

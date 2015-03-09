@@ -1,16 +1,16 @@
 from app import db
-import datetime
 from sqlalchemy.ext.hybrid import hybrid_property
 import bcrypt
+import datetime
 
 
 class Snippet(db.Model):
-    __tablename__ = 'snippet'
+    __tablename__ = 'snippets'
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80))
     body = db.Column(db.Text(), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     date_added = db.Column(db.DateTime)
 
     def __init__(self, title, body):
@@ -23,17 +23,23 @@ class Snippet(db.Model):
 
 
 class User(db.Model):
-    __tablename__ = 'user'
+    __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30), unique=True)
     email = db.Column(db.String(60), unique=True)
     first_name = db.Column(db.String(30))
     last_name = db.Column(db.String(30))
-    authenticated = db.Column(db.Boolean, default=False)
+    authenticated = db.Column(db.Boolean, default=True)
     active = db.Column(db.Boolean, default=True)
     join_date = db.Column(db.DateTime, nullable=False)
     _password_hash = db.Column(db.String)
+
+    def __init__(self, username, email, password):
+        self.password = password.encode('utf-8')
+        self.username = username
+        self.email = email
+        self.join_date = datetime.datetime.utcnow()
 
     @hybrid_property
     def password(self):
@@ -54,8 +60,11 @@ class User(db.Model):
     def is_authenticated(self):
         return self.authenticated
 
-    def __init__(self, username, email, password):
-        self.password = password.encode('utf-8')
-        self.username = username
-        self.email = email
-        self.join_date = datetime.datetime.utcnow()
+    def get_id(self):
+        return self.id
+
+    def is_anonymous(self):
+        return False
+
+    def __repr__(self):
+        return '<Username: {}>'.format(self.username)
