@@ -8,13 +8,16 @@
 	<body class="main">
 	<nav class="navbar navbar-inverse">
 		<div class="container">
-		<a class="navbar-brand">Snipstr.com</a>
-		<div class="pull-right">
+			<a class="navbar-brand" href="{{ url_for('index') }}">Snipstr.com</a>
+		<div class="navbar-form navbar-right">
+			<div class="form-group">
 			{% if current_user.is_anonymous() %}
-			<a href="{{ url_for('login') }}">Log In</a>
+			<a class="btn btn-default" href="{{ url_for('login') }}">Log In</a>
 			{% else %}
-			Welcome, {{ current_user.username }}
+			<span class="welcome">Welcome, {{ current_user.username }}</span>
+			<a class="btn btn-default" href="{{ url_for('logout') }}">Logout</a>
 			{% endif %}
+			</div>
 		</div>
 
 		</div>
