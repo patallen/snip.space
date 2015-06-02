@@ -1,10 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
-{{ snippet.title }}
-	<div class="snippet-options pull-right">
-		<a href="r">Raw Text</a> | <a href="d">Download</a> |  <a href="/report/{{ snippet.id }}">Report</a> 
+
+	<div class="row">
+		<div class="col-sm-6">
+			<h3>{{ snippet.title }}</h3>
+		</div>
+		<div class="snippet-options col-md-6 pull-right">
+			<a href="r">Raw Text</a> | <a href="d">Download</a> |  <a href="/report/{{ snippet.id }}">Report</a> 
+		</div>
 	</div>
-	<textarea readonly class="snippet_form">{{ snippet.body }}</textarea>
-	<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> New Snippet</a>
-	<div class="pull-right">Share your snippet: <input type="text" value="http://snipstr.io/{{ snippet.id }}"></input></div>
+	<div class="row">
+		<div class="form-group col-sm-12">
+			<textarea disabled class="form-control" rows=20>{{ snippet.body }}</textarea>
+		</div>
+		<div class="col-sm-8">
+			<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> New Snippet</a>
+		</div>
+		<div class="col-sm-4">
+			<div class="input-group">
+				<span class="input-group-addon">Share:</span>
+				<input disabled class="form-control" type="text" value="http://snipstr.io/{{ snippet.id }}" />
+			</div>
+		</div>
+	</div>
 {% endblock %}
