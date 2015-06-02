@@ -50,7 +50,7 @@ class User(db.Model):
         self._password_hash = bcrypt.generate_password_hash(password) 
 
     def validate_pass(self, password):
-        return bcrypt.check_password_hash(pw_hash, password)
+        return bcrypt.check_password_hash(self.password, password)
     
     def is_active(self):
         return self.active
