@@ -22,4 +22,15 @@
 		   class="form-control btn btn-success btn-block" />
 	</div>
 </form>
+<script>
+window.onload = function () {
+  
+    var editableCodeMirror = CodeMirror.fromTextArea(document.getElementById('snippet_editable'), {
+        mode: "javascript",
+        theme: "default",
+        lineNumbers: true
+    });
+    editableCodeMirror.setSize('100%', 600); 
+};
+</script>
 {% endblock %}
