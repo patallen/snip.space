@@ -1,6 +1,6 @@
 from app import db
 from sqlalchemy.ext.hybrid import hybrid_property
-import bcrypt
+from app import bcrypt
 import datetime
 
 
@@ -47,13 +47,11 @@ class User(db.Model):
 
     @password.setter
     def _set_pass(self, password):
-        password_salt = bcrypt.gensalt()
-        self._password_hash = bcrypt.hashpw(password, password_salt)
+        self._password_hash = bcrypt.generate_password_hash(password) 
 
     def validate_pass(self, password):
-        return bcrypt.hashpw(password.encode('utf-8'),
-                             self._password_hash) == self._password_hash
-
+        return bcrypt.check_password_hash(pw_hash, password)
+    
     def is_active(self):
         return self.active
 
