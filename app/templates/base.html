@@ -1,6 +1,10 @@
 <html>
 	<head>
 	<title>Snipstr</title>
+	<link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
+    <script src="http://codemirror.net/lib/codemirror.js"></script>
+    <script src="http://codemirror.net/mode/javascript/javascript.js"></script>
+    <script src="{{ url_for('static', filename='js/editor.js') }}"></script>
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
@@ -25,5 +29,6 @@
 	<div class="container">
 		{% block content %}{% endblock %}
 	</div>
+	
 	</body>
 </html>
