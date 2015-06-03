@@ -25,7 +25,7 @@ def index():
     return render_template('index.html', form=snippet_form)
 
 
-@app.route('/<path:snippet_id>/')
+@app.route('/<snippet_id>/')
 def show_snippet(snippet_id):
     snippet = Snippet.query.get(snippet_id)
 
@@ -67,7 +67,9 @@ def login():
         registered_user = User.query.filter_by(username=username).first()
         if registered_user and registered_user.validate_pass(password):
             login_user(registered_user)
-        return redirect('/')
+            return redirect(url_for('home'))
+        else:
+            return redirect(url_for('login')) 
 
     return render_template('login.html', form=login_form)
 
