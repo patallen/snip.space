@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, abort
 from flask.ext.login import login_user, logout_user, current_user
 from app import app, db, login_manager
 from app.forms import SnippetForm, SignupForm, LoginForm
@@ -17,11 +17,10 @@ def index():
         s = Snippet(snippet_form.title.data, snippet_form.snippet.data)
         s.language = Language.query.get(snippet_form.language.data)
         if not current_user.is_anonymous():
-            s.user_id = current_user.id
+            s.user = current_user
         db.session.add(s)
         db.session.commit()
-        snippet_id = s.id
-        return redirect(url_for('show_snippet', snippet_id=snippet_id))
+        return redirect(url_for('show_snippet', snippet_id=s.id))
     return render_template('index.html', form=snippet_form)
 
 
@@ -33,6 +32,14 @@ def show_snippet(snippet_id):
         return "Snippet {} does not exist.".format(snippet_id)
     else:
         return render_template('snippet.html', snippet=snippet)
+
+@app.route('/u/<path:username>/')
+def user_page(username):
+    try:
+        user = User.query.filter(User.username==username).one()
+    except:
+        abort(404)
+    return render_template('user.html', user=user)
 
 
 @app.route('/<snippet_id>/r')

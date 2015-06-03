@@ -35,6 +35,7 @@ class User(db.Model):
     authenticated = db.Column(db.Boolean, default=True)
     active = db.Column(db.Boolean, default=True)
     join_date = db.Column(db.DateTime, nullable=False)
+    snippets = db.relationship('Snippet', backref='user')
     _password_hash = db.Column(db.String)
 
     def __init__(self, username, email, password):

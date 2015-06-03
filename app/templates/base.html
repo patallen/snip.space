@@ -10,18 +10,18 @@
 	<nav class="navbar navbar-inverse">
 		<div class="container">
 			<a class="navbar-brand" href="{{ url_for('index') }}">Snipstr.com</a>
-		<div class="navbar-form navbar-right">
-			<div class="form-group">
-			{% if current_user.is_anonymous() %}
-			<a class="btn btn-default" href="{{ url_for('login') }}">Log In</a>
-			<a class="btn btn-success" href="{{ url_for('signup') }}">Sign Up</a>
-			{% else %}
-			<span class="welcome">Welcome, {{ current_user.username }}</span>
-			<a class="btn btn-default" href="{{ url_for('logout') }}">Logout</a>
-			{% endif %}
+			<div class="navbar-form navbar-right">
+				<div class="form-group">
+				{% if current_user.is_anonymous() %}
+				<a class="btn btn-default" href="{{ url_for('login') }}">Log In</a>
+				<a class="btn btn-success" href="{{ url_for('signup') }}">Sign Up</a>
+				{% else %}
+				<span class="welcome">Welcome, {{ current_user.username }}</span>
+				<a href="{{ url_for('user_page', username=current_user.username) }}">My Snippets </a>
+				<a class="btn btn-default" href="{{ url_for('logout') }}">Logout</a>
+				{% endif %}
+				</div>
 			</div>
-		</div>
-
 		</div>
 	</nav>
 	<div class="container">
