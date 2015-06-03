@@ -23,7 +23,9 @@
 			</div>
 		</div>
 	</div>
+	{% block scripts %}
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/mode/{{ snippet.language }}/{{ snippet.language }}.min.js"></script>
+	{% endblock %}
 	<script>
 	window.onload = function () {
   

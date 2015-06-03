@@ -1,12 +1,10 @@
 <html>
 	<head>
-	<title>Snipstr</title>
-	<link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
-    <script src="http://codemirror.net/lib/codemirror.js"></script>
-    <script src="{{ url_for('static', filename='js/editor.js') }}"></script>
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+		<title>Snipstr</title>
+		<link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+		<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 	</head>
 	<body class="main">
 	<nav class="navbar navbar-inverse">
@@ -16,6 +14,7 @@
 			<div class="form-group">
 			{% if current_user.is_anonymous() %}
 			<a class="btn btn-default" href="{{ url_for('login') }}">Log In</a>
+			<a class="btn btn-success" href="{{ url_for('signup') }}">Sign Up</a>
 			{% else %}
 			<span class="welcome">Welcome, {{ current_user.username }}</span>
 			<a class="btn btn-default" href="{{ url_for('logout') }}">Logout</a>
@@ -28,6 +27,9 @@
 	<div class="container">
 		{% block content %}{% endblock %}
 	</div>
-	
+	<script src="http://codemirror.net/lib/codemirror.js"></script>
+	<script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+	{% block scripts %}
+	{% endblock %}
 	</body>
 </html>

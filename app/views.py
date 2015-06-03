@@ -67,7 +67,7 @@ def login():
         registered_user = User.query.filter_by(username=username).first()
         if registered_user and registered_user.validate_pass(password):
             login_user(registered_user)
-            return redirect(url_for('home'))
+            return redirect(url_for('index'))
         else:
             return redirect(url_for('login')) 
 
