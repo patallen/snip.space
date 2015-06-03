@@ -1,33 +1,10 @@
 from flask_wtf import Form
 from wtforms import TextAreaField, StringField, PasswordField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
-from app.models import User
+from app.models import User, Language
 
-languages = [
-    ('', 'Text'),
-    ('clojure', 'Clojure'),
-    ('css', 'CSS'),
-    ('clike', 'C/C++'),
-    ('d', 'D'),
-    ('dart', 'Dart'),
-    ('erlang', 'Erlang'),
-    ('fortran', 'Fortran'),
-    ('go', 'Go'),
-    ('haskell', 'Haskell'),
-    ('htmlmixed', 'HTML'),
-    ('javascript', 'JavaScript'),
-    ('lua', 'Lua'),
-    ('pascal', 'Pascal'),
-    ('perl', 'Perl'),
-    ('php', 'PHP'),
-    ('python', 'Python'),
-    ('r', 'R'),
-    ('ruby', 'Ruby'),
-    ('rust', 'Rust'),
-    ('shell', 'Shell'),
-    ('sql', 'SQL'),
-    ('xml', 'XML'),
-]
+languages = [(lang.id, lang.display_text) for lang in Language.query.all()]
+
 def unique_username(form, field):
     if User.query.filter(User.username==field.data).first():
         raise ValidationError('Already taken.')

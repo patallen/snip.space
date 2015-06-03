@@ -2,7 +2,7 @@ from flask import render_template, redirect, url_for
 from flask.ext.login import login_user, logout_user, current_user
 from app import app, db, login_manager
 from app.forms import SnippetForm, SignupForm, LoginForm
-from app.models import Snippet, User
+from app.models import Snippet, User, Language
 
 
 @login_manager.user_loader
@@ -15,7 +15,7 @@ def index():
     snippet_form = SnippetForm()
     if snippet_form.validate_on_submit():
         s = Snippet(snippet_form.title.data, snippet_form.snippet.data)
-        s.language = snippet_form.language.data
+        s.language = Language.query.get(snippet_form.language.data)
         if not current_user.is_anonymous():
             s.user_id = current_user.id
         db.session.add(s)

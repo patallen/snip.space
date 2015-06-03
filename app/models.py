@@ -10,7 +10,6 @@ class Snippet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80))
     body = db.Column(db.Text(), nullable=False)
-    language = db.Column(db.Text(64), default='')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     language_id = db.Column(db.String, db.ForeignKey('language.id'))
     language = db.relationship('Language')

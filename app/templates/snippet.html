@@ -24,13 +24,13 @@
 		</div>
 	</div>
 	{% block scripts %}
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/mode/{{ snippet.language }}/{{ snippet.language }}.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/mode/{{ snippet.language.id }}/{{ snippet.language.id }}.min.js"></script>
 	{% endblock %}
 	<script>
 	window.onload = function () {
   
 	    var editableCodeMirror = CodeMirror.fromTextArea(document.getElementById('snippet_readonly'), {
-			mode: "{{ snippet.language }}",
+			mode: "{{ snippet.language.id }}",
 	        theme: "default",
 	        lineNumbers: true,
 	        readOnly: true
