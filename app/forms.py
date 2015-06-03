@@ -4,9 +4,29 @@ from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from app.models import User
 
 languages = [
-    ('python', 'Python'),
+    ('', 'Text'),
+    ('clojure', 'Clojure'),
+    ('css', 'CSS'),
+    ('clike', 'C/C++'),
+    ('d', 'D'),
+    ('dart', 'Dart'),
+    ('erlang', 'Erlang'),
+    ('fortran', 'Fortran'),
+    ('go', 'Go'),
+    ('haskell', 'Haskell'),
+    ('htmlmixed', 'HTML'),
     ('javascript', 'JavaScript'),
-    ('html', 'HTML')
+    ('lua', 'Lua'),
+    ('pascal', 'Pascal'),
+    ('perl', 'Perl'),
+    ('php', 'PHP'),
+    ('python', 'Python'),
+    ('r', 'R'),
+    ('ruby', 'Ruby'),
+    ('rust', 'Rust'),
+    ('shell', 'Shell'),
+    ('sql', 'SQL'),
+    ('xml', 'XML'),
 ]
 def unique_username(form, field):
     if User.query.filter(User.username==field.data).first():
