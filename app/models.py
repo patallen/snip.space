@@ -5,13 +5,15 @@ import datetime
 
 
 class Snippet(db.Model):
-    __tablename__ = 'snippets'
+    __tablename__ = 'snippet'
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80))
     body = db.Column(db.Text(), nullable=False)
     language = db.Column(db.Text(64), default='')
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    language_id = db.Column(db.String, db.ForeignKey('language.id'))
+    language = db.relationship('Language')
     date_added = db.Column(db.DateTime)
 
     def __init__(self, title, body):
@@ -24,7 +26,7 @@ class Snippet(db.Model):
 
 
 class User(db.Model):
-    __tablename__ = 'users'
+    __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30), unique=True)
@@ -67,3 +69,16 @@ class User(db.Model):
 
     def __repr__(self):
         return '<Username: {}>'.format(self.username)
+
+
+class Language(db.Model):
+    __tablename__ = 'language'
+    id = db.Column(db.String(32), primary_key=True)
+    display_text = db.Column(db.String(64), nullable=False)
+
+    def __init__(self, id, display_text):
+        self.id = id
+        self.display_text = display_text
+
+    def __repr__(self):
+        return self.display_text
