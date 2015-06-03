@@ -3,6 +3,7 @@ from flask.ext.login import login_user, logout_user, current_user
 from app import app, db, login_manager
 from app.forms import SnippetForm, SignupForm, LoginForm
 from app.models import Snippet, User, Language
+from hashids import Hashids
 
 
 @login_manager.user_loader
@@ -10,6 +11,17 @@ def load_user(id):
     return User.query.get(int(id))
 
 
+def getSnippetByUuid(uuid):
+    """Return a snippet by it's UUID (hashid)"""
+    hashid = Hashids(salt='salt', min_length=5)
+    # Abort 404 if not valid or not in DB
+    try:
+        decoded_id = hashid.decode(uuid)[0]
+        return Snippet.query.get(decoded_id)
+    except:
+        abort(404)
+
+        
 @app.route('/', methods=['GET', 'POST'])
 def index():
     snippet_form = SnippetForm()
@@ -24,9 +36,12 @@ def index():
     return render_template('index.html', form=snippet_form)
 
 
-@app.route('/<snippet_id>/')
-def show_snippet(snippet_id):
-    snippet = Snippet.query.get(snippet_id)
+@app.route('/<path:snippet_uuid>/')
+def show_snippet(snippet_uuid):
+    try:
+        snippet = getSnippetByUuid(snippet_uuid)
+    except:
+        abort(404)
 
     if snippet is None:
         return "Snippet {} does not exist.".format(snippet_id)
@@ -42,9 +57,9 @@ def user_page(username):
     return render_template('user.html', user=user)
 
 
-@app.route('/<snippet_id>/r')
-def raw_snippet(snippet_id):
-    snippet = Snippet.query.get(snippet_id)
+@app.route('/<path:snippet_uuid>/r')
+def raw_snippet(snippet_uuid):
+    snippet = getSnippetByUuid(snippet_uuid)
 
     if snippet is None:
         return "Snippet {} does not exist.".format(snippet_id)

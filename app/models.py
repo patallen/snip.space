@@ -2,6 +2,7 @@ from app import db
 from sqlalchemy.ext.hybrid import hybrid_property
 from app import bcrypt
 import datetime
+from hashids import Hashids
 
 
 class Snippet(db.Model):
@@ -23,6 +24,9 @@ class Snippet(db.Model):
     def __repr__(self):
         return '{}: {}'.format(self.id, self.title)
 
+    def get_uuid(self):
+        hashid = Hashids(salt='salt', min_length=5)
+        return hashid.encode(self.id)
 
 class User(db.Model):
     __tablename__ = 'user'

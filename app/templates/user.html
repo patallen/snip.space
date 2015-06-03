@@ -12,7 +12,7 @@
 	<tbody>
 		{% for snippet in user.snippets %}
 		<tr>
-			<td><a href="{{ url_for('show_snippet', snippet_id=snippet.id) }}">{{ snippet.title }}</a></td>
+			<td><a href="{{ url_for('show_snippet', snippet_uuid=snippet.get_uuid()) }}">{{ snippet.title }}</a></td>
 			<td>{{ snippet.date_added.strftime('%b %d, %Y') }}</td>
 			<td>{{ snippet.language }}</td>
 			<td>10</td>
