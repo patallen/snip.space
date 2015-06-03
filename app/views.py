@@ -53,7 +53,7 @@ def signup():
                  signup_form.password.data)
         db.session.add(u)
         db.session.commit()
-        return redirect('/')
+        return redirect(url_for('login'))
     return render_template('signup.html', form=signup_form)
 
 
