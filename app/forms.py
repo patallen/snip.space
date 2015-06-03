@@ -1,8 +1,13 @@
 from flask_wtf import Form
-from wtforms import TextAreaField, StringField, PasswordField
+from wtforms import TextAreaField, StringField, PasswordField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from app.models import User
 
+languages = [
+    ('python', 'Python'),
+    ('javascript', 'JavaScript'),
+    ('html', 'HTML')
+]
 def unique_username(form, field):
     if User.query.filter(User.username==field.data).first():
         raise ValidationError('Already taken.')
@@ -14,6 +19,7 @@ def unique_email(form, field):
 class SnippetForm(Form):
     title = StringField('Title')
     snippet = TextAreaField('snippet', validators=[DataRequired()])
+    language = SelectField('language', choices=languages)
 
 class SignupForm(Form):
     email = StringField('Email', validators=[DataRequired(), Email(), unique_email])

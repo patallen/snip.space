@@ -10,6 +10,7 @@ class Snippet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80))
     body = db.Column(db.Text(), nullable=False)
+    language = db.Column(db.Text(64), default='')
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     date_added = db.Column(db.DateTime)
 
@@ -19,7 +20,7 @@ class Snippet(db.Model):
         self.date_added = datetime.datetime.utcnow()
 
     def __repr__(self):
-        return '<ID: {}>'.format(self.id)
+        return '{}: {}'.format(self.id, self.title)
 
 
 class User(db.Model):

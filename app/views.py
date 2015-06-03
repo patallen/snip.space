@@ -15,6 +15,7 @@ def index():
     snippet_form = SnippetForm()
     if snippet_form.validate_on_submit():
         s = Snippet(snippet_form.title.data, snippet_form.snippet.data)
+        s.language = snippet_form.language.data
         if not current_user.is_anonymous():
             s.user_id = current_user.id
         db.session.add(s)
