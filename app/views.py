@@ -21,7 +21,7 @@ def getSnippetByUuid(uuid):
     except:
         abort(404)
 
-        
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     snippet_form = SnippetForm()
@@ -60,11 +60,7 @@ def user_page(username):
 @app.route('/<path:snippet_uuid>/r')
 def raw_snippet(snippet_uuid):
     snippet = getSnippetByUuid(snippet_uuid)
-
-    if snippet is None:
-        return "Snippet {} does not exist.".format(snippet_id)
-    else:
-        return render_template('raw.html', snippet=snippet)
+    return '<pre>{}</pre>'.format(snippet.body)
 
 
 @app.route('/signup/', methods=['POST', 'GET'])
