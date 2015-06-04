@@ -32,7 +32,7 @@ def index():
             s.user = current_user
         db.session.add(s)
         db.session.commit()
-        return redirect(url_for('show_snippet', snippet_id=s.id))
+        return redirect(url_for('show_snippet', snippet_uuid=s.get_uuid()))
     return render_template('index.html', form=snippet_form)
 
 
