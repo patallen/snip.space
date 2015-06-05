@@ -47,6 +47,13 @@ def show_snippet(snippet_uuid):
         return "Snippet does not exist."
     return render_template('snippet.html', snippet=snippet)
 
+
+@app.route('/<path:snippet_uuid>/r/')
+def raw_snippet(snippet_uuid):
+    snippet = getSnippetByUuid(snippet_uuid)
+    return '<pre>{}</pre>'.format(snippet.body)
+
+
 @app.route('/u/<path:username>/')
 def user_page(username):
     try:
@@ -54,12 +61,6 @@ def user_page(username):
     except:
         abort(404)
     return render_template('user.html', user=user)
-
-
-@app.route('/<path:snippet_uuid>/r')
-def raw_snippet(snippet_uuid):
-    snippet = getSnippetByUuid(snippet_uuid)
-    return '<pre>{}</pre>'.format(snippet.body)
 
 
 @app.route('/signup/', methods=['POST', 'GET'])
@@ -89,6 +90,7 @@ def login():
             return redirect(url_for('login')) 
 
     return render_template('login.html', form=login_form)
+
 
 @app.route('/logout/')
 def logout():

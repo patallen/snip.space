@@ -2,8 +2,15 @@
 {% block content %}
 
 	<div class="row">
-		<div class="col-sm-6">
+		<div class="col-sm-12">
 			<h3>{{ snippet.title }}</h3>
+			
+		</div>
+		<div class="snippet-info col-sm-6">
+			<small>Created by: 
+				{% if snippet.user %}
+					<a href="{{url_for('user_page', username=snippet.user) }}">{{ snippet.user }}</a> 
+				{% else %}Anonymous{% endif %} | Views: {{ snippet.hits }} | Created on: {{ snippet.date_added.strftime('%b %d, %Y') }}</small>
 		</div>
 		<div class="snippet-options col-md-6 pull-right">
 			<a href="r">Raw Text</a> | <a href="d">Download</a> |  <a href="/report/{{ snippet.id }}">Report</a> 
@@ -11,7 +18,7 @@
 	</div>
 	<div class="row">
 		<div class="form-group col-sm-12">
-			<textarea disabled id="snippet_readonly" rows=20>{{ snippet.body }}</textarea>
+			<textarea disabled id="snippet_readonly" rows=20>{{ snippet.body | safe }}</textarea>
 		</div>
 		<div class="col-sm-8">
 			<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> New Snippet</a>

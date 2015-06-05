@@ -29,7 +29,9 @@ body {
 }
 
 .snippet-options {
-	margin-top: 24px;
 	text-align: right;
+}
+.snippet-info {
+	margin-bottom: 10px;
 }
 
