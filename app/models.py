@@ -11,6 +11,7 @@ class Snippet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80))
     body = db.Column(db.Text(), nullable=False)
+    hits = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     language_id = db.Column(db.String, db.ForeignKey('language.id'))
     language = db.relationship('Language')
@@ -27,6 +28,7 @@ class Snippet(db.Model):
     def get_uuid(self):
         hashid = Hashids(salt='salt', min_length=5)
         return hashid.encode(self.id)
+
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -72,7 +74,7 @@ class User(db.Model):
         return False
 
     def __repr__(self):
-        return '<Username: {}>'.format(self.username)
+        return self.username
 
 
 class Language(db.Model):

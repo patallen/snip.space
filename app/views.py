@@ -40,13 +40,12 @@ def index():
 def show_snippet(snippet_uuid):
     try:
         snippet = getSnippetByUuid(snippet_uuid)
+        snippet.hits = snippet.hits + 1
+        db.session.add(snippet)
+        db.session.commit()
     except:
-        abort(404)
-
-    if snippet is None:
-        return "Snippet {} does not exist.".format(snippet_id)
-    else:
-        return render_template('snippet.html', snippet=snippet)
+        return "Snippet does not exist."
+    return render_template('snippet.html', snippet=snippet)
 
 @app.route('/u/<path:username>/')
 def user_page(username):
