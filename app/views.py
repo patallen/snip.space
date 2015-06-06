@@ -15,7 +15,6 @@ def getSnippetByUuid(uuid):
     """Return a snippet by it's UUID (hashid)"""
     hashid = Hashids(salt=app.config['HASHID_SALT'],
                      min_length=app.config['HASHID_LEN'])
-    print(app.config['HASHID_SALT'])
     # Abort 404 if not valid or not in DB
     try:
         decoded_id = hashid.decode(uuid)[0]
