@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="text-center">
+<h3>Are you sure you want to delete <strong>{{ snippet.get_uuid() }}</strong>:</h3>
+<h4><em>{{ snippet.title }}</em></h4>
+<form action="{{ url_for('delete_snippet', snippet_uuid=snippet.get_uuid()) }}" method="POST">
+	{{ form.csrf_token }}
+	{{ form.delete(class="btn btn-danger") }}
+	<a class="btn btn-warning" href="{{ url_for('user_page', username=current_user.username) }}">No, abort.</a>
+</form>
+</div>
+{% endblock %}

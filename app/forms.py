@@ -1,5 +1,5 @@
 from flask_wtf import Form
-from wtforms import TextAreaField, StringField, PasswordField, SelectField
+from wtforms import TextAreaField, StringField, PasswordField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from app.models import User, Language
 
@@ -27,3 +27,6 @@ class SignupForm(Form):
 class LoginForm(Form):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
+
+class DeleteForm(Form):
+    delete = SubmitField('DELETE')

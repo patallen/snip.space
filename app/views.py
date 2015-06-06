@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, abort
-from flask.ext.login import login_user, logout_user, current_user
+from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, login_manager
-from app.forms import SnippetForm, SignupForm, LoginForm
+from app.forms import SnippetForm, SignupForm, LoginForm, DeleteForm
 from app.models import Snippet, User, Language
 from hashids import Hashids
 
@@ -17,9 +17,10 @@ def getSnippetByUuid(uuid):
     # Abort 404 if not valid or not in DB
     try:
         decoded_id = hashid.decode(uuid)[0]
-        return Snippet.query.get(decoded_id)
+        snippet = Snippet.query.get(decoded_id)
     except:
-        abort(404)
+        pass 
+    return snippet 
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -52,6 +53,24 @@ def show_snippet(snippet_uuid):
 def raw_snippet(snippet_uuid):
     snippet = getSnippetByUuid(snippet_uuid)
     return '<pre>{}</pre>'.format(snippet.body)
+
+
+@app.route('/<path:snippet_uuid>/delete/', methods=['GET', 'POST'])
+@login_required
+def delete_snippet(snippet_uuid):
+    snippet = getSnippetByUuid(snippet_uuid)
+    if not snippet:
+        return "Snippet does not exist"
+
+    if current_user != snippet.user:
+       return "You do not have permission to delete that." 
+    form = DeleteForm()
+    
+    if form.validate_on_submit():
+        db.session.delete(snippet)
+        db.session.commit()
+        return redirect(url_for('user_page', username=current_user.username))
+    return render_template('delete.html', form=form, snippet=snippet) 
 
 
 @app.route('/u/<path:username>/')
