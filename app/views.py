@@ -19,12 +19,13 @@ def getSnippetByUuid(uuid):
         decoded_id = hashid.decode(uuid)[0]
         snippet = Snippet.query.get(decoded_id)
     except:
-        pass 
+        abort(404)
     return snippet 
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    """Route allows users to create a new snippet"""
     snippet_form = SnippetForm()
     if snippet_form.validate_on_submit():
         s = Snippet(snippet_form.title.data, snippet_form.snippet.data)
@@ -39,6 +40,9 @@ def index():
 
 @app.route('/<path:snippet_uuid>/')
 def show_snippet(snippet_uuid):
+    """Route shows a snippet given it's 
+    unique identifier - displayed in a read only
+    codemirror textarea"""
     try:
         snippet = getSnippetByUuid(snippet_uuid)
         snippet.hits = snippet.hits + 1
@@ -51,6 +55,8 @@ def show_snippet(snippet_uuid):
 
 @app.route('/<path:snippet_uuid>/r/')
 def raw_snippet(snippet_uuid):
+    """Route returns the raw text of a snippet
+    in a blank page in the browser"""
     snippet = getSnippetByUuid(snippet_uuid)
     return '<pre>{}</pre>'.format(snippet.body)
 
@@ -58,6 +64,8 @@ def raw_snippet(snippet_uuid):
 @app.route('/<path:snippet_uuid>/delete/', methods=['GET', 'POST'])
 @login_required
 def delete_snippet(snippet_uuid):
+    """Route lets the owner of a snippet delete
+    the snippet"""
     snippet = getSnippetByUuid(snippet_uuid)
     if not snippet:
         return "Snippet does not exist"
@@ -75,6 +83,8 @@ def delete_snippet(snippet_uuid):
 
 @app.route('/u/<path:username>/')
 def user_page(username):
+    """Route returns snippets and their info for
+    snippets created by specified user"""
     try:
         user = User.query.filter(User.username==username).one()
     except:
@@ -84,6 +94,7 @@ def user_page(username):
 
 @app.route('/signup/', methods=['POST', 'GET'])
 def signup():
+    """Route for letting a user sign up"""
     signup_form = SignupForm()
     if signup_form.validate_on_submit():
         u = User(signup_form.username.data, signup_form.email.data,
@@ -96,6 +107,7 @@ def signup():
 
 @app.route('/login/', methods=['POST', 'GET'])
 def login():
+    """Route for logging in a user"""
     login_form = LoginForm()
 
     if login_form.validate_on_submit():
@@ -112,6 +124,7 @@ def login():
 
 
 @app.route('/logout/')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
