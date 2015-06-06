@@ -5,7 +5,7 @@ from flask.ext.login import LoginManager
 from flask.ext.bcrypt import Bcrypt
 
 app = Flask(__name__)
-app.config.from_object('config')
+app.config.from_envvar('SNIPSPACE_SETTINGS')
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager()
