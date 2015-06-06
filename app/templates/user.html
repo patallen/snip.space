@@ -3,10 +3,13 @@
 <h3>Snippets by <em>{{ user.username }}</em></h3>
 <table class="table table-striped">
 	<thead>
-		<th>Title</th>
+		<th class="col-sm-4">Title</th>
 		<th>Date Added</th>
-		<th>Syntax</th>
-		<th>Views</th>
+		<th class="col-sm-2">Syntax</th>
+		<th class="col-sm-2">Views</th>
+		{% if current_user == user %}
+		<th class="col-sm-1">Actions</th>
+		{% endif %}
 	</thead>
 	<tbody>
 		{% for snippet in user.snippets %}
@@ -15,6 +18,9 @@
 			<td>{{ snippet.date_added.strftime('%b %d, %Y') }}</td>
 			<td>{{ snippet.language }}</td>
 			<td>{{ snippet.hits }}</td>
+			{% if current_user == user %}
+			<td class="text-center"><a href="{{ url_for('delete_snippet', snippet_uuid=snippet.get_uuid()) }}"><i class="fa fa-trash"></i></a></td>
+			{% endif %}
 		</tr>
 		{% endfor %}
 	</tbody>

@@ -22,6 +22,11 @@
 		</div>
 		<div class="col-sm-8">
 			<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> New Snippet</a>
+			{% if current_user == snippet.user %}
+			<a href="{{ url_for('delete_snippet', snippet_uuid=snippet.get_uuid()) }}" class="btn btn-danger">
+				<span class="fa fa-trash"></span> Delete
+			</a>
+			{% endif %}
 		</div>
 		<div class="col-sm-4">
 			<div class="input-group">
