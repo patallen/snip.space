@@ -29,7 +29,9 @@ def index():
     """Route allows users to create a new snippet"""
     snippet_form = SnippetForm()
     if snippet_form.validate_on_submit():
-        s = Snippet(snippet_form.title.data, snippet_form.snippet.data)
+        s = Snippet(snippet_form.snippet.data)
+        if snippet_form.title.data:
+            s.title = snippet_form.title.data
         s.language = Language.query.get(snippet_form.language.data)
         if not current_user.is_anonymous():
             s.user = current_user
