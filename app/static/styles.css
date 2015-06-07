@@ -34,9 +34,7 @@ body {
 .snippet-info {
 	margin-bottom: 10px;
 }
-.new-snippet-btn {
-	margin-bottom: 20px;
-}
+
 .snippet-textarea {
 	width: 100%;
 	background: white;
@@ -48,4 +46,7 @@ body {
 }
 .navbar .options a {
 	color: #9d9d9d;
+}
+.options-container {
+	margin-bottom: 20px;
 }
