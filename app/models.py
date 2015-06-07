@@ -9,7 +9,7 @@ class Snippet(db.Model):
     __tablename__ = 'snippet'
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(80))
+    title = db.Column(db.String(80), default='Untitled')
     body = db.Column(db.Text(), nullable=False)
     hits = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -17,8 +17,7 @@ class Snippet(db.Model):
     language = db.relationship('Language')
     date_added = db.Column(db.DateTime)
 
-    def __init__(self, title, body):
-        self.title = title
+    def __init__(self, body):
         self.body = body
         self.date_added = datetime.datetime.utcnow()
 
