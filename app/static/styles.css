@@ -25,7 +25,7 @@ body {
 	margin-right: 10px;
 }
 .main {
-	background: url("http://subtlepatterns.com/patterns/concrete_seamless.png") !important;
+	background: url("/static/concrete_bg.png") !important;
 }
 
 .snippet-options {
