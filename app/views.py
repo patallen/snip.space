@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, abort
+from flask import render_template, redirect, url_for, abort, Response
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, login_manager
 from app.forms import SnippetForm, SignupForm, LoginForm, DeleteForm
@@ -59,7 +59,7 @@ def raw_snippet(snippet_uuid):
     """Route returns the raw text of a snippet
     in a blank page in the browser"""
     snippet = getSnippetByUuid(snippet_uuid)
-    return '<pre>{}</pre>'.format(snippet.body)
+    return Response(snippet.body, mimetype='text/plain') 
 
 
 @app.route('/<path:snippet_uuid>/delete/', methods=['GET', 'POST'])
