@@ -34,4 +34,18 @@ body {
 .snippet-info {
 	margin-bottom: 10px;
 }
-
+.new-snippet-btn {
+	margin-bottom: 20px;
+}
+.snippet-textarea {
+	width: 100%;
+	background: white;
+}
+.navbar .options {
+	color: #9d9d9d;
+	display: inline;
+	margin-right: 10px;
+}
+.navbar .options a {
+	color: #9d9d9d;
+}

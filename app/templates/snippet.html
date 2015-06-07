@@ -18,10 +18,10 @@
 	</div>
 	<div class="row">
 		<div class="form-group col-sm-12">
-			<textarea disabled id="snippet_readonly" rows=20>{{ snippet.body | safe }}</textarea>
+			<textarea disabled class="snippet-textarea" id="snippet_readonly" rows=20>{{ snippet.body | safe }}</textarea>
 		</div>
 		<div class="col-sm-8">
-			<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> New Snippet</a>
+			<a href="/" class="new-snippet-btn btn btn-default"><span class="glyphicon glyphicon-plus"></span> New Snippet</a>
 			{% if current_user == snippet.user %}
 			<a href="{{ url_for('delete_snippet', snippet_uuid=snippet.get_uuid()) }}" class="btn btn-danger">
 				<span class="fa fa-trash"></span> Delete

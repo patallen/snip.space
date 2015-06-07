@@ -18,7 +18,11 @@
 				<a class="btn btn-success" href="{{ url_for('signup') }}">Sign Up</a>
 				{% else %}
 				<span class="welcome">Welcome, {{ current_user.username }}</span>
-				<a href="{{ url_for('user_page', username=current_user.username) }}">My Snippets </a>
+				<div class = "options">
+					<a href="{{ url_for('user_page', username=current_user.username) }}">My Snippets </a>
+					|
+					<a href="#">Settings</a>
+				</div>
 				<a class="btn btn-default" href="{{ url_for('logout') }}">Logout</a>
 				{% endif %}
 				</div>
@@ -32,7 +36,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-4">
-					<p class="text-muted"><i class="fa fa-rocket"></i> snip.space | <a class="text-muted" href="http://github.com/patallen/Snipstr">github</a></p>
+					<p class="text-muted"><i class="fa fa-rocket"></i> snip.space | view on <a  href="http://github.com/patallen/snip.space">github</a></p>
 				</div>
 				<div class="col-sm-8 text-right">
 					<p class="text-muted">About | Terms & Conditions | Privacy</p>
