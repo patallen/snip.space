@@ -3,16 +3,30 @@ A user-based snippet/text respository. Keep track of and share all of your rando
 
 ## Instructions
 1. Clone the repository `git clone https://github.com/patallen/snip.space.git`
-2. Create virtualenv in main directory: `virtualenv venv`-p python3
-3. Install python dependencies: `pip install -r requirements.txt`
-4. To run server: `python run.py`
+1. Create virtualenv in main directory: `virtualenv venv` (python 2.7)
+1. Install python dependencies: `pip install -r requirements.txt`
+1. Create postgres database
+1. Create settings file that includes:
+	- SECRET_KEY
+	- SQLALCHEMY_DATABASE_URI
+	- DEBUG
+	- HASHID_SALT
+	- HASHID_LEN
+1. `export SNIPSPACE_SETTINGS=/path/to/settings/file`
+1. Populate database with seed data `python populate_db.py`
+1. To run server: `python manage.py runserver -dr`
 
 ## TODO:
-- [ ] Snippet view count
+- [ ] Flash messages
+- [ ] Ability to edit snippets 
 - [ ] Private snippets
-- [ ] Implement PostgreSQL Database
-- [ ] Prettify pages
+- [ ] Make snippets downloadable
+- [ ] Report snippet functionality
+- [ ] Ability to sort snippets on user page
+- [ ] Email verification and password reset
 - [ ] Statistics page
+- [x] Implement PostgreSQL Database
+- [x] Snippet view count
 - [x] Flask-login for sessions
 - [x] Member pages
 - [x] Implement UUID functionality
@@ -21,4 +35,3 @@ A user-based snippet/text respository. Keep track of and share all of your rando
 - [x] Create Snippet model
 - [x] Create User model
 - [x] Implement user sign-up w/ password hashing
-
