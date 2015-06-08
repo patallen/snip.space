@@ -10,7 +10,7 @@
 			<small>Created by: 
 				{% if snippet.user %}
 					<a href="{{url_for('user_page', username=snippet.user) }}">{{ snippet.user }}</a> 
-				{% else %}Anonymous{% endif %} | Views: {{ snippet.hits }} | Created on: {{ snippet.date_added.strftime('%b %d, %Y') }}</small>
+					{% else %}Anonymous{% endif %} | Views: {{ snippet.hits }} | Created on: {{ snippet.date_added.strftime('%b %d, %Y') }} | Syntax: {{ snippet.language.display_text }}</small>
 		</div>
 		<div class="snippet-options col-md-6 pull-right">
 			<a href="r">Raw Text</a> | <a href="d">Download</a> |  <a href="/report/{{ snippet.id }}">Report</a> 
