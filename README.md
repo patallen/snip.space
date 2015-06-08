@@ -20,11 +20,12 @@ A user-based snippet/text respository. Keep track of and share all of your rando
 - [ ] Flash messages
 - [ ] Ability to edit snippets 
 - [ ] Private snippets
-- [ ] Make snippets downloadable
+- [ ] Make downloaded files use proper extension
 - [ ] Report snippet functionality
 - [ ] Ability to sort snippets on user page
 - [ ] Email verification and password reset
 - [ ] Statistics page
+- [x] Make snippets downloadable
 - [x] Implement PostgreSQL Database
 - [x] Snippet view count
 - [x] Flask-login for sessions

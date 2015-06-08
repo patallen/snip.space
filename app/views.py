@@ -63,6 +63,7 @@ def raw_snippet(snippet_uuid):
     snippet = getSnippetByUuid(snippet_uuid)
     return Response(snippet.body, mimetype='text/plain')
 
+
 @app.route('/<path:snippet_uuid>/d/')
 def download_snippet(snippet_uuid):
     """Route returns a downloadable file containing 
