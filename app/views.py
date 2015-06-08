@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, abort, Response
+from flask import render_template, redirect, url_for, abort, Response, make_response
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, login_manager
 from app.forms import SnippetForm, SignupForm, LoginForm, DeleteForm
@@ -61,7 +61,16 @@ def raw_snippet(snippet_uuid):
     """Route returns the raw text of a snippet
     in a blank page in the browser"""
     snippet = getSnippetByUuid(snippet_uuid)
-    return Response(snippet.body, mimetype='text/plain') 
+    return Response(snippet.body, mimetype='text/plain')
+
+@app.route('/<path:snippet_uuid>/d/')
+def download_snippet(snippet_uuid):
+    """Route returns a downloadable file containing 
+    the raw text of a snippet"""
+    snippet = getSnippetByUuid(snippet_uuid).body
+    response = make_response(snippet)
+    response.headers['Content-Disposition'] = "attachment; filename={}.txt".format(snippet_uuid)
+    return response
 
 
 @app.route('/<path:snippet_uuid>/delete/', methods=['GET', 'POST'])
