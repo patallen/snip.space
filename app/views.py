@@ -68,9 +68,14 @@ def raw_snippet(snippet_uuid):
 def download_snippet(snippet_uuid):
     """Route returns a downloadable file containing 
     the raw text of a snippet"""
-    snippet = getSnippetByUuid(snippet_uuid).body
-    response = make_response(snippet)
-    response.headers['Content-Disposition'] = "attachment; filename={}.txt".format(snippet_uuid)
+    snippet = getSnippetByUuid(snippet_uuid)
+    body = snippet.body
+    ext = snippet.language.extension
+    response = make_response(body)
+    
+    response.headers['Content-Disposition'] =\
+                     "attachment; filename={}{}"\
+                     .format(snippet_uuid, ext)
     return response
 
 
