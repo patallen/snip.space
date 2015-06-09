@@ -4,6 +4,7 @@ from app import app, db, login_manager
 from app.forms import SnippetForm, SignupForm, LoginForm, DeleteForm
 from app.models import Snippet, User, Language
 from hashids import Hashids
+import sendgrid
 
 
 @login_manager.user_loader
@@ -23,6 +24,7 @@ def getSnippetByUuid(uuid):
         abort(404)
     return snippet 
 
+
 def populateSnippetForm(form, snippet=None):
     """Populate the snippet form's language choicefield
     with languages from the database."""
@@ -32,6 +34,21 @@ def populateSnippetForm(form, snippet=None):
         form.language.data = snippet.language_id
         form.title.data = snippet.title
         form.snippet.data = snippet.body
+
+
+def sendEmail(to_email, subject, body):
+    """Use sendgrid's api to send email from noreply@snip.space"""
+    sg = sendgrid.SendGridClient(
+        app.config['SENDGRID_API_USER'],
+        app.config['SENDGRID_API_KEY']
+    )
+    message = sendgrid.Mail()
+    message.add_to(to_email)
+    message.set_from('noreply@snip.space')
+    message.set_subject(subject)
+    message.set_html(body)
+
+    sg.send(message)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -66,6 +83,7 @@ def show_snippet(snippet_uuid):
     except:
         return "Snippet does not exist."
     return render_template('snippet.html', snippet=snippet)
+
 
 @app.route('/<path:snippet_uuid>/edit/', methods=['GET', 'POST'])
 @login_required
@@ -158,6 +176,11 @@ def signup():
         db.session.commit()
         return redirect(url_for('login'))
     return render_template('signup.html', form=signup_form)
+
+
+@app.route('/confirm/<path:confirm_key>/')
+def confirm_email(confirm_key):
+    pass
 
 
 @app.route('/login/', methods=['POST', 'GET'])
