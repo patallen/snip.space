@@ -2,36 +2,36 @@ from app import db
 from app.models import User, Language
 
 languages = [
-    ('', 'Text'),
-    ('clojure', 'Clojure'),
-    ('css', 'CSS'),
-    ('clike', 'C/C++'),
-    ('d', 'D'),
-    ('dart', 'Dart'),
-    ('erlang', 'Erlang'),
-    ('fortran', 'Fortran'),
-    ('go', 'Go'),
-    ('haskell', 'Haskell'),
-    ('htmlmixed', 'HTML'),
-    ('javascript', 'JavaScript'),
-    ('lua', 'Lua'),
-    ('pascal', 'Pascal'),
-    ('perl', 'Perl'),
-    ('php', 'PHP'),
-    ('python', 'Python'),
-    ('r', 'R'),
-    ('ruby', 'Ruby'),
-    ('rust', 'Rust'),
-    ('shell', 'Shell'),
-    ('sql', 'SQL'),
-    ('xml', 'XML'),
+    ('', 'Text', '.txt'),
+    ('clojure', 'Clojure', '.clj'),
+    ('css', 'CSS', '.css'),
+    ('clike', 'C/C++', '.cpp'),
+    ('d', 'D', '.txt'),
+    ('dart', 'Dart', '.dart'),
+    ('erlang', 'Erlang', '.erl'),
+    ('fortran', 'Fortran', '.txt'),
+    ('go', 'Go', '.go'),
+    ('haskell', 'Haskell', '.hs'),
+    ('htmlmixed', 'HTML', '.html'),
+    ('javascript', 'JavaScript', '.js'),
+    ('lua', 'Lua', '.lua'),
+    ('pascal', 'Pascal', '.pas'),
+    ('perl', 'Perl', '.pl'),
+    ('php', 'PHP', '.php'),
+    ('python', 'Python', '.py'),
+    ('r', 'R', '.txt'),
+    ('ruby', 'Ruby', '.rb'),
+    ('rust', 'Rust', '.rs'),
+    ('shell', 'Shell', '.sh'),
+    ('sql', 'SQL', '.sql'),
+    ('xml', 'XML', '.xml'),
 ]
 
 def populate():
 	db.drop_all()
 	db.create_all()
 	for lang in languages:
-		add_lang(lang[0], lang[1])
+		add_lang(lang[0], lang[1], lang[2])
 
 	add_user("pat", 'password', 'prallen90@gmail.com')
 	db.session.commit()
@@ -41,8 +41,8 @@ def print_langs():
 	for lang in langs:
 		print(lang)
 
-def add_lang(id, display):
-	lang = Language(id, display)
+def add_lang(id, display, ext):
+	lang = Language(id, display, ext)
 	db.session.add(lang)
 	return lang
 
