@@ -81,10 +81,12 @@ class Language(db.Model):
     __tablename__ = 'language'
     id = db.Column(db.String(32), primary_key=True)
     display_text = db.Column(db.String(64), nullable=False)
+    extension = db.Column(db.String(32))
 
-    def __init__(self, id, display_text):
+    def __init__(self, id, display_text, ext):
         self.id = id
         self.display_text = display_text
+        self.extension = ext
 
     def __repr__(self):
         return self.display_text
