@@ -20,12 +20,12 @@ A user-based snippet/text respository. Keep track of and share all of your rando
 ## TODO:
 - [ ] Add flash messages
 - [ ] Custom 404 pages
-- [ ] Ability to edit snippets 
 - [ ] Private snippets
 - [ ] Report snippet functionality
 - [ ] Ability to sort snippets on user page
 - [ ] Email verification and password reset
 - [ ] Statistics page
+- [x] Ability to edit snippets 
 - [x] Make downloaded files use proper extension
 - [x] Make snippets downloadable
 - [x] Implement PostgreSQL Database

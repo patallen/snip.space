@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
+{% if snippet %}
+<h3>Edit snippet {{ snippet.get_uuid() }}: <em>{{ snippet.title }}</em></h3>
+<form method="POST" action="{{ url_for('edit_snippet', snippet_uuid=snippet.get_uuid()) }}">
+{% else %}
 <form method="POST" action="/">
+{% endif %}
 	{{ form.csrf_token }}
 	<div class="row">
 		<div class="col-sm-3">
@@ -18,8 +23,22 @@
 						rows=20 ) }}
 		</div>
 	</div>
+	{% if snippet %}
+	<div class="row">
+		<div class="col-sm-8">
+			<input type="submit" value="Save Snippet"
+					class="btn btn-success btn-block" />
+		</div>
+		<div class="col-sm-4">
+			<a href="/" class="btn btn-danger btn-block" />
+				Cancel
+			</a>
+		</div>
+	</div>
+	{% else %}
 	<input type="submit" value="Submit"
 		   class="form-control btn btn-success btn-block" />
+	{% endif %}
 	</div>
 </form>
 <script>

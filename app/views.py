@@ -23,11 +23,22 @@ def getSnippetByUuid(uuid):
         abort(404)
     return snippet 
 
+def populateSnippetForm(form, snippet=None):
+    """Populate the snippet form's language choicefield
+    with languages from the database."""
+    languages = [(lang.id, lang.display_text) for lang in Language.query.all()]
+    form.language.choices = languages
+    if snippet:
+        form.language.data = snippet.language_id
+        form.title.data = snippet.title
+        form.snippet.data = snippet.body
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     """Route allows users to create a new snippet"""
     snippet_form = SnippetForm()
+    populateSnippetForm(snippet_form)
     if snippet_form.validate_on_submit():
         s = Snippet(snippet_form.snippet.data)
         if snippet_form.title.data:
@@ -38,6 +49,7 @@ def index():
         db.session.add(s)
         db.session.commit()
         return redirect(url_for('show_snippet', snippet_uuid=s.get_uuid()))
+
     return render_template('index.html', form=snippet_form)
 
 
@@ -54,6 +66,31 @@ def show_snippet(snippet_uuid):
     except:
         return "Snippet does not exist."
     return render_template('snippet.html', snippet=snippet)
+
+@app.route('/<path:snippet_uuid>/edit/', methods=['GET', 'POST'])
+@login_required
+def edit_snippet(snippet_uuid):
+    """Route allows a user to modify a snippet if
+    he or she is the owner"""
+    snippet = getSnippetByUuid(snippet_uuid)
+
+    if current_user != snippet.user:
+        return "You are not the owner of this snippet"
+
+    snippet_form = SnippetForm()
+    populateSnippetForm(snippet_form, snippet)
+    
+    if snippet_form.validate_on_submit():
+        s = Snippet(snippet_form.snippet.data)
+        if snippet_form.title.data:
+            s.title = snippet_form.title.data
+        s.language = Language.query.get(snippet_form.language.data)
+        if not current_user.is_anonymous():
+            s.user = current_user
+        db.session.add(s)
+        db.session.commit()
+        return redirect(url_for('show_snippet', snippet_uuid=s.get_uuid()))
+    return render_template('index.html', form=snippet_form, snippet=snippet)   
 
 
 @app.route('/<path:snippet_uuid>/r/')

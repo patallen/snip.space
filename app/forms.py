@@ -3,7 +3,6 @@ from wtforms import TextAreaField, StringField, PasswordField, SelectField, Subm
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from app.models import User, Language
 
-languages = [(lang.id, lang.display_text) for lang in Language.query.all()]
 
 def unique_username(form, field):
     if User.query.filter(User.username==field.data).first():
@@ -16,7 +15,7 @@ def unique_email(form, field):
 class SnippetForm(Form):
     title = StringField('Title')
     snippet = TextAreaField('snippet', validators=[DataRequired()])
-    language = SelectField('language', choices=languages)
+    language = SelectField('language')
 
 class SignupForm(Form):
     email = StringField('Email', validators=[DataRequired(), Email(), unique_email])
