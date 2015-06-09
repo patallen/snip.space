@@ -13,18 +13,20 @@ A user-based snippet/text respository. Keep track of and share all of your rando
 	- HASHID_SALT
 	- HASHID_LEN
 1. `export SNIPSPACE_SETTINGS=/path/to/settings/file`
+1. `python manage.py db upgrade`
 1. Populate database with seed data `python populate_db.py`
 1. To run server: `python manage.py runserver -dr`
 
 ## TODO:
-- [ ] Flash messages
+- [ ] Add flash messages
+- [ ] Custom 404 pages
 - [ ] Ability to edit snippets 
 - [ ] Private snippets
-- [ ] Make downloaded files use proper extension
 - [ ] Report snippet functionality
 - [ ] Ability to sort snippets on user page
 - [ ] Email verification and password reset
 - [ ] Statistics page
+- [x] Make downloaded files use proper extension
 - [x] Make snippets downloadable
 - [x] Implement PostgreSQL Database
 - [x] Snippet view count
