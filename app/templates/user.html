@@ -19,7 +19,10 @@
 			<td>{{ snippet.language }}</td>
 			<td>{{ snippet.hits }}</td>
 			{% if current_user == user %}
-			<td class="text-center"><a href="{{ url_for('delete_snippet', snippet_uuid=snippet.get_uuid()) }}"><i class="fa fa-trash"></i></a></td>
+			<td class="text-center">
+				<a href="{{ url_for('edit_snippet', snippet_uuid=snippet.get_uuid()) }}"><i class="fa fa-pencil"></i></a> | 
+				<a href="{{ url_for('delete_snippet', snippet_uuid=snippet.get_uuid()) }}"><i class="fa fa-trash"></i></a>
+			</td>
 			{% endif %}
 		</tr>
 		{% endfor %}

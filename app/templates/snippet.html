@@ -23,6 +23,9 @@
 		<div class="col-sm-8">
 			<a href="/" class="new-snippet-btn btn btn-default"><span class="glyphicon glyphicon-plus"></span> New Snippet</a>
 			{% if current_user == snippet.user %}
+			<a href="{{ url_for('edit_snippet', snippet_uuid=snippet.get_uuid()) }}" class="btn btn-primary">
+				<span class="fa fa-pencil"></span> Edit
+			</a>
 			<a href="{{ url_for('delete_snippet', snippet_uuid=snippet.get_uuid()) }}" class="btn btn-danger">
 				<span class="fa fa-trash"></span> Delete
 			</a>
