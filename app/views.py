@@ -5,7 +5,9 @@ from app.forms import SnippetForm, SignupForm, LoginForm, DeleteForm
 from app.models import Snippet, User, Language
 from hashids import Hashids
 import sendgrid
+from itsdangerous import URLSafeTimedSerializer
 
+serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 @login_manager.user_loader
 def load_user(id):
@@ -24,6 +26,16 @@ def getSnippetByUuid(uuid):
         abort(404)
     return snippet 
 
+def generateConfirmationToken(email):
+    return serializer.dumps(email, salt=app.config['EMAIL_CONF_SALT'])
+
+def decodeConfirmationToken(token):
+    email = serializer.loads(
+        token,
+        salt = app.config['EMAIL_CONF_SALT'],
+        max_age = (60 * 60 * 24)
+    )
+    return email
 
 def populateSnippetForm(form, snippet=None):
     """Populate the snippet form's language choicefield
@@ -170,16 +182,22 @@ def signup():
     """Route for letting a user sign up"""
     signup_form = SignupForm()
     if signup_form.validate_on_submit():
-        u = User(signup_form.username.data, signup_form.email.data,
+        email = signup_form.email.data
+        u = User(signup_form.username.data, email,
                  signup_form.password.data)
         db.session.add(u)
         db.session.commit()
+        confirm_token = generateConfirmationToken(email)
+        email_body = 'Welcome to snip.space! <a href="{}">Click here</a> to confirm your email!'\
+        .format(url_for('confirm_email', confirm_token=confirm_token, _external=True))
+
+        sendEmail(email, 'Confirm snip.space Email Address', email_body)
         return redirect(url_for('login'))
     return render_template('signup.html', form=signup_form)
 
 
-@app.route('/confirm/<path:confirm_key>/')
-def confirm_email(confirm_key):
+@app.route('/confirm/<path:confirm_token>/')
+def confirm_email(confirm_token):
     pass
 
 
