@@ -42,6 +42,8 @@ class User(db.Model):
     active = db.Column(db.Boolean, default=True)
     join_date = db.Column(db.DateTime, nullable=False)
     snippets = db.relationship('Snippet', backref='user')
+    confirmed = db.Column(db.Boolean, default=False)
+    confirmed_date = db.Column(db.DateTime)
     _password_hash = db.Column(db.String)
 
     def __init__(self, username, email, password):
@@ -66,6 +68,9 @@ class User(db.Model):
 
     def is_authenticated(self):
         return self.authenticated
+
+    def is_confirmed(self):
+        return self.confirmed
 
     def get_id(self):
         return self.id
