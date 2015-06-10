@@ -33,7 +33,7 @@ def decodeConfirmationToken(token):
     email = serializer.loads(
         token,
         salt = app.config['EMAIL_CONF_SALT'],
-        max_age = (60 * 60 * 24)
+        max_age = app.config['CONFIRM_EMAIL_EXP']
     )
     return email
 
