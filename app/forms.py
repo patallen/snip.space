@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from wtforms import TextAreaField, StringField, PasswordField, SelectField, SubmitField
-from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Regexp
 from app.models import User, Language
 
 
@@ -19,7 +19,7 @@ class SnippetForm(Form):
 
 class SignupForm(Form):
     email = StringField('Email', validators=[DataRequired(), Email(), unique_email])
-    username = StringField('Username', validators=[DataRequired(), unique_username])
+    username = StringField('Username', validators=[DataRequired(), unique_username, Regexp('^\w+$')])
     password = PasswordField('Password', validators=[DataRequired(), EqualTo('confirm', message='Passwords must mach.')])
     confirm = PasswordField('Confirm Password')
 

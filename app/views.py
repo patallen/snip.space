@@ -219,7 +219,8 @@ def confirm_email(confirm_token):
 
 @app.route('/login/', methods=['POST', 'GET'])
 def login():
-    """Route for logging in a user"""
+    """Log in users if they are registered and confirmed,
+    provided they supply the correct password"""
     login_form = LoginForm()
 
     if login_form.validate_on_submit():
