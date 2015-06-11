@@ -11,6 +11,7 @@ class Snippet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), default='Untitled')
     body = db.Column(db.Text(), nullable=False)
+    private = db.Column(db.Boolean, default=False)
     hits = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     language_id = db.Column(db.String, db.ForeignKey('language.id'))
@@ -28,6 +29,9 @@ class Snippet(db.Model):
         hashid = Hashids(salt=app.config['HASHID_SALT'],
                          min_length=app.config['HASHID_LEN'])
         return hashid.encode(self.id)
+
+    def is_private(self):
+        return self.private
 
 
 class User(db.Model):
