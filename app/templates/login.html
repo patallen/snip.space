@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="row">
+		{% for msg in get_flashed_messages() %}
+		<div class="col-sm-offset-3 col-sm-6 text-center alert alert-danger">
+			<i class="fa fa-exclamation-triangle"> </i>&nbsp;{{ msg }}
+		</div>
+		{% endfor %}
 	<div class="col-md-offset-4 col-md-4">
 		<form method="post" action="/login/">
 			{{ form.csrf_token }}

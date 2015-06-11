@@ -1,11 +1,12 @@
-from flask import render_template, redirect, url_for, abort, Response, make_response
+from flask import render_template, redirect, url_for, abort, Response, make_response, flash
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, login_manager
 from app.forms import SnippetForm, SignupForm, LoginForm, DeleteForm
 from app.models import Snippet, User, Language
 from hashids import Hashids
 import sendgrid
-from itsdangerous import URLSafeTimedSerializer
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
+from datetime import datetime
 
 serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
@@ -198,7 +199,22 @@ def signup():
 
 @app.route('/confirm/<path:confirm_token>/')
 def confirm_email(confirm_token):
-    pass
+    try:
+        email = decodeConfirmationToken(confirm_token)
+    except SignatureExpired:
+        return "This token has expired." 
+    except BadSignature:
+        return "Invalid token." 
+
+    user = User.query.filter(User.email == email).one()
+
+    if user.is_confirmed():
+        return "You have already confirmed your email address."
+    user.confirmed = True
+    user.confirmed_date = datetime.utcnow()
+    db.session.add(user)
+    db.session.commit()
+    return redirect(url_for('login'))
 
 
 @app.route('/login/', methods=['POST', 'GET'])
@@ -210,11 +226,15 @@ def login():
         username = login_form.username.data
         password = login_form.password.data
         registered_user = User.query.filter_by(username=username).first()
-        if registered_user and registered_user.validate_pass(password):
+
+        if not registered_user or not registered_user.validate_pass(password):
+            flash('Incorrect username or password') 
+        elif not registered_user.is_confirmed():
+            flash('You must confirm your email before logging in.')
+        else:
             login_user(registered_user)
             return redirect(url_for('index'))
-        else:
-            return redirect(url_for('login')) 
+        return redirect('login')
 
     return render_template('login.html', form=login_form)
 
