@@ -1,30 +1,30 @@
-## Snipstr
-A user-based snippet/text respository. Keep track of and share all of your random snippets.
+## snip.space
+An ad-free, free, and open source user-based code snippet/text respository. Sign up and keep track of and share all of your random snippets.
 
 ## Instructions
 1. Clone the repository `git clone https://github.com/patallen/snip.space.git`
-1. Create virtualenv in main directory: `virtualenv venv` (python 2.7)
+1. Create a python 2.7 virtualenv in main directory: `virtualenv venv`
 1. Install python dependencies: `pip install -r requirements.txt`
 1. Create postgres database
-1. Create settings file that includes:
-	- SECRET_KEY
-	- SQLALCHEMY_DATABASE_URI
-	- DEBUG
-	- HASHID_SALT
-	- HASHID_LEN
-1. `export SNIPSPACE_SETTINGS=/path/to/settings/file`
+1. Create settings file based off of default_settings.py
+	- Place outside of project dir: ex `~/settings/snipspace.py`
+	- `export SNIPSPACE_SETTINGS=~/settings/snipspace.py`
 1. `python manage.py db upgrade`
 1. Populate database with seed data `python populate_db.py`
 1. To run server: `python manage.py runserver -dr`
 
 ## TODO:
+- [ ] RQ task queue for emails and ..?
+- [ ] CreateSuperuser manager script
 - [ ] Add flash messages
+- [ ] User snippet pagination
 - [ ] Custom 404 pages
 - [ ] Private snippets
 - [ ] Report snippet functionality
 - [ ] Ability to sort snippets on user page
-- [ ] Email verification and password reset
+- [ ] Password reset functionality
 - [ ] Statistics page
+- [x] Email verification
 - [x] Ability to edit snippets 
 - [x] Make downloaded files use proper extension
 - [x] Make snippets downloadable
