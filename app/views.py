@@ -193,6 +193,7 @@ def signup():
         .format(url_for('confirm_email', confirm_token=confirm_token, _external=True))
 
         sendEmail(email, 'Confirm snip.space Email Address', email_body)
+        flash('Check your email for a confirmation link!', 'info')
         return redirect(url_for('login'))
     return render_template('signup.html', form=signup_form)
 
@@ -229,9 +230,9 @@ def login():
         registered_user = User.query.filter_by(username=username).first()
 
         if not registered_user or not registered_user.validate_pass(password):
-            flash('Incorrect username or password') 
+            flash('Incorrect username or password', 'danger') 
         elif not registered_user.is_confirmed():
-            flash('You must confirm your email before logging in.')
+            flash('You must confirm your email before logging in.', 'danger')
         else:
             login_user(registered_user)
             return redirect(url_for('index'))

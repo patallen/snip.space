@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="row">
-		{% for msg in get_flashed_messages() %}
-		<div class="col-sm-offset-3 col-sm-6 text-center alert alert-danger">
+		{% for category, msg in get_flashed_messages(with_categories=true) %}
+		<div class="col-sm-offset-3 col-sm-6 text-center alert alert-{{ category }}">
 			<i class="fa fa-exclamation-triangle"> </i>&nbsp;{{ msg }}
 		</div>
 		{% endfor %}
@@ -10,11 +10,23 @@
 		<form method="post" action="/login/">
 			{{ form.csrf_token }}
 			<div class="form-group">
-			{{ form.username.label }}:<br>
+			{{ form.username.label }}:
+			{% for error in form.username.errors %}
+				<span class="alert-warning">
+				{{ error }}
+				</span>
+			{% endfor %}
+			<br>
 			{{ form.username(class="form-control", placeholder="enter username") }}
 			</div>
 			<div class="form-group">
-			{{ form.password.label }}:<br>
+			{{ form.password.label }}:
+			{% for error in form.password.errors %}
+				<span class="alert-warning">
+				{{ error }}
+				</span>
+			{% endfor %}
+			<br>
 			{{ form.password(class="form-control", placeholder="enter password") }}
 			</div>
 			<div class="form-group">
