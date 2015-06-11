@@ -10,13 +10,12 @@ An ad-free, free, and open source user-based code snippet/text respository. Sign
 	- Place outside of project dir: ex `~/settings/snipspace.py`
 	- `export SNIPSPACE_SETTINGS=~/settings/snipspace.py`
 1. `python manage.py db upgrade`
-1. Populate database with seed data `python populate_db.py`
-1. To run server: `python manage.py runserver -dr`
+1. Seed database `python manage.py seed`
+1. Create superuser `python manage.py createsuperuser`
+1. To run server: `python manage.py runserver`
 
 ## TODO:
 - [ ] RQ task queue for emails and ..?
-- [ ] CreateSuperuser manager script
-- [ ] Add flash messages
 - [ ] User snippet pagination
 - [ ] Custom 404 pages
 - [ ] Private snippets
@@ -24,6 +23,8 @@ An ad-free, free, and open source user-based code snippet/text respository. Sign
 - [ ] Ability to sort snippets on user page
 - [ ] Password reset functionality
 - [ ] Statistics page
+- [x] CreateSuperuser manager script
+- [x] Add flash messages
 - [x] Email verification
 - [x] Ability to edit snippets 
 - [x] Make downloaded files use proper extension
