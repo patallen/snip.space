@@ -24,7 +24,7 @@ def getSnippetByUuid(uuid):
         decoded_id = hashid.decode(uuid)[0]
         snippet = Snippet.query.get(decoded_id)
     except:
-        abort(404)
+        pass
     return snippet 
 
 def generateConfirmationToken(email):
@@ -91,7 +91,8 @@ def show_snippet(snippet_uuid):
         db.session.add(snippet)
         db.session.commit()
     except:
-        return "Snippet does not exist."
+        message = "The snippet you are looking for does not exist."
+        return render_template('errorpages/404.html', message=message), 404
     return render_template('snippet.html', snippet=snippet)
 
 
@@ -100,10 +101,15 @@ def show_snippet(snippet_uuid):
 def edit_snippet(snippet_uuid):
     """Route allows a user to modify a snippet if
     he or she is the owner"""
-    snippet = getSnippetByUuid(snippet_uuid)
+    try:
+        snippet = getSnippetByUuid(snippet_uuid)
+    except:
+        message = "The snippet you are looking for does not exist."
+        return render_template('errorpages/404.html', message=message), 404
 
     if current_user != snippet.user:
-        return "You are not the owner of this snippet"
+        message = "You are not authorized to edit this snippet."
+        return render_template('errorpages/401.html', message=message), 401
 
     snippet_form = SnippetForm()
     populateChoiceField(snippet_form)
@@ -129,7 +135,12 @@ def edit_snippet(snippet_uuid):
 def raw_snippet(snippet_uuid):
     """Route returns the raw text of a snippet
     in a blank page in the browser"""
-    snippet = getSnippetByUuid(snippet_uuid)
+    try:
+        snippet = getSnippetByUuid(snippet_uuid)
+    except:
+        message = "The snippet you are looking for does not exist."
+        return render_template('errorpages/404.html', message=message), 404
+
     return Response(snippet.body, mimetype='text/plain')
 
 
@@ -137,7 +148,12 @@ def raw_snippet(snippet_uuid):
 def download_snippet(snippet_uuid):
     """Route returns a downloadable file containing 
     the raw text of a snippet"""
-    snippet = getSnippetByUuid(snippet_uuid)
+    try:
+        snippet = getSnippetByUuid(snippet_uuid)
+    except:
+        message = "The snippet you are looking for does not exist."
+        return render_template('errorpages/404.html', message=message), 404
+
     body = snippet.body
     ext = snippet.language.extension
     response = make_response(body)
@@ -153,12 +169,16 @@ def download_snippet(snippet_uuid):
 def delete_snippet(snippet_uuid):
     """Route lets the owner of a snippet delete
     the snippet"""
-    snippet = getSnippetByUuid(snippet_uuid)
-    if not snippet:
-        return "Snippet does not exist"
+    try:
+        snippet = getSnippetByUuid(snippet_uuid)
+    except:
+        message = "The snippet you are looking for does not exist."
+        return render_template('errorpages/404.html', message=message), 404
 
     if current_user != snippet.user:
-       return "You do not have permission to delete that." 
+        message = "You are not authorized to edit this snippet."
+        return render_template('errorpages/401.html', message=message), 401
+
     form = DeleteForm()
     
     if form.validate_on_submit():
@@ -175,7 +195,9 @@ def user_page(username):
     try:
         user = User.query.filter(User.username==username).one()
     except:
-        abort(404)
+        message = "The user you are looking for does not exist."
+        return render_template('errorpages/404.html', message=message), 404
+
     return render_template('user.html', user=user)
 
 

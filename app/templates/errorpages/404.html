@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class='text-center'>
+<h1>Uh oh... we've got a 404 :(</h1>
+
+{% if message %}
+<h3>{{ message }}</h3>
+{% endif %}
+<p>Click <a href="{{ url_for('index') }}">here</a> to get somewhere more useful.</p>
+</div>
+{% endblock %}
