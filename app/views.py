@@ -38,15 +38,12 @@ def decodeConfirmationToken(token):
     )
     return email
 
-def populateSnippetForm(form, snippet=None):
+
+def populateChoiceField(form):
     """Populate the snippet form's language choicefield
     with languages from the database."""
     languages = [(lang.id, lang.display_text) for lang in Language.query.all()]
     form.language.choices = languages
-    if snippet:
-        form.language.data = snippet.language_id
-        form.title.data = snippet.title
-        form.snippet.data = snippet.body
 
 
 def sendEmail(to_email, subject, body):
@@ -68,7 +65,7 @@ def sendEmail(to_email, subject, body):
 def index():
     """Route allows users to create a new snippet"""
     snippet_form = SnippetForm()
-    populateSnippetForm(snippet_form)
+    populateChoiceField(snippet_form)
     if snippet_form.validate_on_submit():
         s = Snippet(snippet_form.snippet.data)
         if snippet_form.title.data:
@@ -109,18 +106,22 @@ def edit_snippet(snippet_uuid):
         return "You are not the owner of this snippet"
 
     snippet_form = SnippetForm()
-    populateSnippetForm(snippet_form, snippet)
+    populateChoiceField(snippet_form)
     
     if snippet_form.validate_on_submit():
-        s = Snippet(snippet_form.snippet.data)
+        snippet.body = snippet_form.snippet.data
         if snippet_form.title.data:
-            s.title = snippet_form.title.data
-        s.language = Language.query.get(snippet_form.language.data)
-        if not current_user.is_anonymous():
-            s.user = current_user
-        db.session.add(s)
+            snippet.title = snippet_form.title.data
+        snippet.language = Language.query.get(snippet_form.language.data)
+        db.session.add(snippet)
         db.session.commit()
-        return redirect(url_for('show_snippet', snippet_uuid=s.get_uuid()))
+        return redirect(url_for('show_snippet', snippet_uuid=snippet.get_uuid()))
+
+    snippet_form.title.default = snippet.title
+    snippet_form.snippet.default = snippet.body
+    snippet_form.language.default = snippet.language_id
+    snippet_form.process()
+    #populateSnippetForm(snippet_form, snippet)
     return render_template('index.html', form=snippet_form, snippet=snippet)   
 
 
