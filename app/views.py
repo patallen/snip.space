@@ -2,7 +2,8 @@ from app import app, db, login_manager
 from app.forms import SnippetForm, SignupForm, LoginForm, DeleteForm
 from app.models import Snippet, User, Language
 from datetime import datetime
-from flask import render_template, redirect, url_for, abort, Response, make_response, flash
+from flask import render_template, redirect, url_for, abort
+from flask import Response, make_response, flash, request
 from flask_login import login_user, logout_user, current_user, login_required
 from util.email import generateToken, decodeToken, sendEmail
 from util.getters import getSnippetByUuid, getUserByUsername
@@ -134,10 +135,17 @@ def user_page(username):
     """Route returns snippets and their info for
     snippets created by specified user"""
     user = getUserByUsername(username)
-    if current_user == user:
-        snippets = user.snippets
-    else:
-        snippets = Snippet.query.filter(Snippet.user == user, Snippet.private == False).all()
+
+    # set page to 1 in case it wasn't specified
+    page = 1
+    if request.args.get('page'):
+        page = request.args.get('page')
+    
+    snipQuery = Snippet.query.filter(Snippet.user == user)
+    if current_user != user:
+        snipQuery = snipQuery.filter(Snippet.private == False)
+
+    snippets = snipQuery.paginate(int(page), 10, False)
     return render_template('user.html', user=user, snippets=snippets)
 
 
