@@ -1,94 +1,17 @@
-from flask import render_template, redirect, url_for, abort, Response, make_response, flash
-from flask_login import login_user, logout_user, current_user, login_required
 from app import app, db, login_manager
 from app.forms import SnippetForm, SignupForm, LoginForm, DeleteForm
 from app.models import Snippet, User, Language
-from hashids import Hashids
-import sendgrid
-from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 from datetime import datetime
+from flask import render_template, redirect, url_for, abort, Response, make_response, flash
+from flask_login import login_user, logout_user, current_user, login_required
+from util.email import generateToken, decodeToken, sendEmail
 from util.getters import getSnippetByUuid, getUserByUsername
-
-serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-
-class SnippetNotFound(Exception):
-    pass
-class UserNotFound(Exception):
-    pass
-
-@app.errorhandler(SnippetNotFound)
-def snippet_not_found(e):
-    message = "The snippet you are looking for does not exist."
-    return render_template('errorpages/404.html', message=message), 404
-
-
-@app.errorhandler(UserNotFound)
-def user_not_found(e):
-    message = "The user you are looking for does not exist."
-    return render_template('errorpages/404.html', message=message), 404
+from util.helpers import populateChoiceField
 
 
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
-
-
-def getSnippetByUuid(uuid):
-    """Return a snippet by it's UUID (hashid)"""
-    hashid = Hashids(salt=app.config['HASHID_SALT'],
-                     min_length=app.config['HASHID_LEN'])
-    # If snippet doesn't exist, SnippetNotFound will 404
-    try:
-        decoded_id = hashid.decode(uuid)[0]
-        snippet = Snippet.query.get(decoded_id)
-    except:
-        raise SnippetNotFound
-
-    return snippet
-
-
-def getUserByUsername(username):
-    try:
-        user = User.query.filter(User.username==username).one()
-    except:
-        raise UserNotFound
-
-    return user
-
-
-def generateConfirmationToken(email):
-    return serializer.dumps(email, salt=app.config['EMAIL_CONF_SALT'])
-
-
-def decodeConfirmationToken(token):
-    email = serializer.loads(
-        token,
-        salt = app.config['EMAIL_CONF_SALT'],
-        max_age = app.config['CONFIRM_EMAIL_EXP']
-    )
-    return email
-
-
-def populateChoiceField(form):
-    """Populate the snippet form's language choicefield
-    with languages from the database."""
-    languages = [(lang.id, lang.display_text) for lang in Language.query.all()]
-    form.language.choices = languages
-
-
-def sendEmail(to_email, subject, body):
-    """Use sendgrid's api to send email from noreply@snip.space"""
-    sg = sendgrid.SendGridClient(
-        app.config['SENDGRID_API_USER'],
-        app.config['SENDGRID_API_KEY']
-    )
-    message = sendgrid.Mail()
-    message.add_to(to_email)
-    message.set_from('noreply@snip.space')
-    message.set_subject(subject)
-    message.set_html(body)
-
-    sg.send(message)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -152,7 +75,7 @@ def edit_snippet(snippet_uuid):
     snippet_form.snippet.default = snippet.body
     snippet_form.language.default = snippet.language_id
     snippet_form.process()
-    #populateSnippetForm(snippet_form, snippet)
+
     return render_template('index.html', form=snippet_form, snippet=snippet)   
 
 
@@ -220,7 +143,7 @@ def signup():
                  signup_form.password.data)
         db.session.add(u)
         db.session.commit()
-        confirm_token = generateConfirmationToken(email)
+        confirm_token = generateToken(email)
         email_body = 'Welcome to snip.space! <a href="{}">Click here</a> to confirm your email!'\
         .format(url_for('confirm_email', confirm_token=confirm_token, _external=True))
 
@@ -233,7 +156,7 @@ def signup():
 @app.route('/confirm/<path:confirm_token>/')
 def confirm_email(confirm_token):
     try:
-        email = decodeConfirmationToken(confirm_token)
+        email = decodeToken(confirm_token)
     except SignatureExpired:
         return "This token has expired." 
     except BadSignature:
