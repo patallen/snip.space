@@ -1,5 +1,6 @@
 from flask_wtf import Form
-from wtforms import TextAreaField, StringField, PasswordField, SelectField, SubmitField
+from wtforms import TextAreaField, StringField, BooleanField
+from wtforms import PasswordField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Regexp
 from app.models import User, Language
 
@@ -16,6 +17,7 @@ class SnippetForm(Form):
     title = StringField('Title')
     snippet = TextAreaField('snippet', validators=[DataRequired()])
     language = SelectField('language')
+    private = BooleanField('Set Private?')
 
 class SignupForm(Form):
     email = StringField('Email', validators=[DataRequired(), Email(), unique_email])

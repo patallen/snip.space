@@ -16,9 +16,9 @@ class UserNotFound(Exception):
 
 @app.errorhandler(Unauthorized)
 def unauthorized(e):
-    """Custom errorhandler that renders a '401 Unauthorized' template"""
-    message = "You are not authorized to edit this snippet."
-    return render_template('errorpages/401.html', message=message), 401
+    """Custom errorhandler that renders a '401 Unauthorized' template
+    with message passed to exception"""
+    return render_template('errorpages/401.html', message=e), 401
 
 
 @app.errorhandler(SnippetNotFound)

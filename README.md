@@ -18,11 +18,11 @@ An ad-free, free, and open source user-based code snippet/text respository. Sign
 - [ ] RQ task queue for emails and ..?
 - [ ] User settings page
 - [ ] User snippet pagination
-- [ ] Private snippets
 - [ ] Report snippet functionality
 - [ ] Ability to sort snippets on user page
 - [ ] Password reset functionality
 - [ ] Statistics page
+- [x] Private snippets
 - [x] Custom 404 exceptions and pages
 - [x] CreateSuperuser manager script
 - [x] Add flash messages

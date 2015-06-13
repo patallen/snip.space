@@ -12,9 +12,16 @@
 		{% endif %}
 	</thead>
 	<tbody>
-		{% for snippet in user.snippets %}
+		{% for snippet in snippets %}
 		<tr>
-			<td><a href="{{ url_for('show_snippet', snippet_uuid=snippet.get_uuid()) }}">{{ snippet.title }}</a></td>
+			<td>
+				{% if snippet.is_private() %}
+				<i class="fa fa-lock"></i> 
+				{% else %}
+				<i class="fa fa-unlock"></i> 
+				{% endif %}&nbsp;
+				<a href="{{ url_for('show_snippet', snippet_uuid=snippet.get_uuid()) }}">{{ snippet.title }}</a>
+			</td>
 			<td>{{ snippet.date_added.strftime('%b %d, %Y') }}</td>
 			<td>{{ snippet.language }}</td>
 			<td>{{ snippet.hits }}</td>

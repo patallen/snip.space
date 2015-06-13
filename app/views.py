@@ -27,6 +27,7 @@ def index():
         s.language = Language.query.get(snippet_form.language.data)
         if not current_user.is_anonymous():
             s.user = current_user
+            s.private = snippet_form.private.data
         db.session.add(s)
         db.session.commit()
         return redirect(url_for('show_snippet', snippet_uuid=s.get_uuid()))
@@ -41,6 +42,8 @@ def show_snippet(snippet_uuid):
     codemirror textarea"""
     
     snippet = getSnippetByUuid(snippet_uuid)
+    if snippet.is_private() and snippet.user != current_user:
+        raise Unauthorized("This snippet is private.")
     snippet.hits = snippet.hits + 1
     db.session.add(snippet)
     db.session.commit()
@@ -57,7 +60,7 @@ def edit_snippet(snippet_uuid):
     snippet = getSnippetByUuid(snippet_uuid)
 
     if current_user != snippet.user:
-        raise Unauthorized
+        raise Unauthorized("You must be the creator or a snippet to edit it.")
 
     snippet_form = SnippetForm()
     populateChoiceField(snippet_form)
@@ -67,6 +70,7 @@ def edit_snippet(snippet_uuid):
         if snippet_form.title.data:
             snippet.title = snippet_form.title.data
         snippet.language = Language.query.get(snippet_form.language.data)
+        snippet.private = snippet_form.private.data
         db.session.add(snippet)
         db.session.commit()
         return redirect(url_for('show_snippet', snippet_uuid=snippet.get_uuid()))
@@ -74,6 +78,7 @@ def edit_snippet(snippet_uuid):
     snippet_form.title.default = snippet.title
     snippet_form.snippet.default = snippet.body
     snippet_form.language.default = snippet.language_id
+    snippet_form.private.default = snippet.is_private()
     snippet_form.process()
 
     return render_template('index.html', form=snippet_form, snippet=snippet)   
@@ -129,8 +134,11 @@ def user_page(username):
     """Route returns snippets and their info for
     snippets created by specified user"""
     user = getUserByUsername(username)
-
-    return render_template('user.html', user=user)
+    if current_user == user:
+        snippets = user.snippets
+    else:
+        snippets = Snippet.query.filter(Snippet.user == user, Snippet.private == False).all()
+    return render_template('user.html', user=user, snippets=snippets)
 
 
 @app.route('/signup/', methods=['POST', 'GET'])

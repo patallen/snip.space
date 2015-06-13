@@ -3,8 +3,14 @@
 
 	<div class="row">
 		<div class="col-sm-12">
-			<h3>{{ snippet.title }}</h3>
-			
+			<h3>
+				{% if snippet.is_private() %}
+				<i class="fa fa-lock"></i> 
+				{% else %}
+				<i class="fa fa-unlock"></i> 
+				{% endif %}
+				{{ snippet.title }}
+			</h3>
 		</div>
 		<div class="snippet-info col-sm-6">
 			<small>Created by: 

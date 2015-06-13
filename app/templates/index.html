@@ -23,6 +23,17 @@
 						rows=20 ) }}
 		</div>
 	</div>
+	<div class="checkbox">
+		{% if current_user.is_authenticated() %}
+		<label>
+		{{ form.private }} Set Private?
+		</label>
+		{% else %}
+		<label>
+		{{ form.private(disabled="true") }} Set Private?
+		</label> (<a href="{{ url_for('login') }}">Login</a> or <a href="{{ url_for('signup') }}">Signup</a>)
+		{% endif %}
+	</div>
 	{% if snippet %}
 	<div class="row">
 		<div class="col-sm-8">
