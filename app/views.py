@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, abort, Response, make_response, flash
-from flask.ext.login import login_user, logout_user, current_user, login_required
+from flask_login import login_user, logout_user, current_user, login_required
 from app import app, db, login_manager
 from app.forms import SnippetForm, SignupForm, LoginForm, DeleteForm
 from app.models import Snippet, User, Language
@@ -7,8 +7,26 @@ from hashids import Hashids
 import sendgrid
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 from datetime import datetime
+from util.getters import getSnippetByUuid, getUserByUsername
 
 serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+
+class SnippetNotFound(Exception):
+    pass
+class UserNotFound(Exception):
+    pass
+
+@app.errorhandler(SnippetNotFound)
+def snippet_not_found(e):
+    message = "The snippet you are looking for does not exist."
+    return render_template('errorpages/404.html', message=message), 404
+
+
+@app.errorhandler(UserNotFound)
+def user_not_found(e):
+    message = "The user you are looking for does not exist."
+    return render_template('errorpages/404.html', message=message), 404
+
 
 @login_manager.user_loader
 def load_user(id):
@@ -19,16 +37,28 @@ def getSnippetByUuid(uuid):
     """Return a snippet by it's UUID (hashid)"""
     hashid = Hashids(salt=app.config['HASHID_SALT'],
                      min_length=app.config['HASHID_LEN'])
-    # Abort 404 if not valid or not in DB
+    # If snippet doesn't exist, SnippetNotFound will 404
     try:
         decoded_id = hashid.decode(uuid)[0]
         snippet = Snippet.query.get(decoded_id)
     except:
-        pass
-    return snippet 
+        raise SnippetNotFound
+
+    return snippet
+
+
+def getUserByUsername(username):
+    try:
+        user = User.query.filter(User.username==username).one()
+    except:
+        raise UserNotFound
+
+    return user
+
 
 def generateConfirmationToken(email):
     return serializer.dumps(email, salt=app.config['EMAIL_CONF_SALT'])
+
 
 def decodeConfirmationToken(token):
     email = serializer.loads(
@@ -85,14 +115,12 @@ def show_snippet(snippet_uuid):
     """Route shows a snippet given it's 
     unique identifier - displayed in a read only
     codemirror textarea"""
-    try:
-        snippet = getSnippetByUuid(snippet_uuid)
-        snippet.hits = snippet.hits + 1
-        db.session.add(snippet)
-        db.session.commit()
-    except:
-        message = "The snippet you are looking for does not exist."
-        return render_template('errorpages/404.html', message=message), 404
+    
+    snippet = getSnippetByUuid(snippet_uuid)
+    snippet.hits = snippet.hits + 1
+    db.session.add(snippet)
+    db.session.commit()
+
     return render_template('snippet.html', snippet=snippet)
 
 
@@ -101,11 +129,8 @@ def show_snippet(snippet_uuid):
 def edit_snippet(snippet_uuid):
     """Route allows a user to modify a snippet if
     he or she is the owner"""
-    try:
-        snippet = getSnippetByUuid(snippet_uuid)
-    except:
-        message = "The snippet you are looking for does not exist."
-        return render_template('errorpages/404.html', message=message), 404
+
+    snippet = getSnippetByUuid(snippet_uuid)
 
     if current_user != snippet.user:
         message = "You are not authorized to edit this snippet."
@@ -135,12 +160,7 @@ def edit_snippet(snippet_uuid):
 def raw_snippet(snippet_uuid):
     """Route returns the raw text of a snippet
     in a blank page in the browser"""
-    try:
-        snippet = getSnippetByUuid(snippet_uuid)
-    except:
-        message = "The snippet you are looking for does not exist."
-        return render_template('errorpages/404.html', message=message), 404
-
+    snippet = getSnippetByUuid(snippet_uuid)
     return Response(snippet.body, mimetype='text/plain')
 
 
@@ -148,11 +168,8 @@ def raw_snippet(snippet_uuid):
 def download_snippet(snippet_uuid):
     """Route returns a downloadable file containing 
     the raw text of a snippet"""
-    try:
-        snippet = getSnippetByUuid(snippet_uuid)
-    except:
-        message = "The snippet you are looking for does not exist."
-        return render_template('errorpages/404.html', message=message), 404
+
+    snippet = getSnippetByUuid(snippet_uuid)
 
     body = snippet.body
     ext = snippet.language.extension
@@ -169,12 +186,8 @@ def download_snippet(snippet_uuid):
 def delete_snippet(snippet_uuid):
     """Route lets the owner of a snippet delete
     the snippet"""
-    try:
-        snippet = getSnippetByUuid(snippet_uuid)
-    except:
-        message = "The snippet you are looking for does not exist."
-        return render_template('errorpages/404.html', message=message), 404
-
+    snippet = getSnippetByUuid(snippet_uuid)
+ 
     if current_user != snippet.user:
         message = "You are not authorized to edit this snippet."
         return render_template('errorpages/401.html', message=message), 401
@@ -192,11 +205,7 @@ def delete_snippet(snippet_uuid):
 def user_page(username):
     """Route returns snippets and their info for
     snippets created by specified user"""
-    try:
-        user = User.query.filter(User.username==username).one()
-    except:
-        message = "The user you are looking for does not exist."
-        return render_template('errorpages/404.html', message=message), 404
+    user = getUserByUsername(username)
 
     return render_template('user.html', user=user)
 
