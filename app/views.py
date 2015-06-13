@@ -7,6 +7,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from util.email import generateToken, decodeToken, sendEmail
 from util.getters import getSnippetByUuid, getUserByUsername
 from util.helpers import populateChoiceField
+from util.errors import Unauthorized
 
 
 @login_manager.user_loader
@@ -56,8 +57,7 @@ def edit_snippet(snippet_uuid):
     snippet = getSnippetByUuid(snippet_uuid)
 
     if current_user != snippet.user:
-        message = "You are not authorized to edit this snippet."
-        return render_template('errorpages/401.html', message=message), 401
+        raise Unauthorized
 
     snippet_form = SnippetForm()
     populateChoiceField(snippet_form)
