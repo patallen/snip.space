@@ -7,14 +7,14 @@ serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 
 def generateToken(email):
-	"""Generates a token from the user's email address
-	that will be used to confirm his or her email"""
+    """Generates a token from the user's email address
+    that will be used to confirm his or her email"""
     return serializer.dumps(email, salt=app.config['EMAIL_CONF_SALT'])
 
 
 def decodeToken(token):
-	"""Takes a token created by generateToken and
-	decodes it back into the user's email address"""
+    """Takes a token created by generateToken and
+    decodes it back into the user's email address"""
     email = serializer.loads(
         token,
         salt = app.config['EMAIL_CONF_SALT'],

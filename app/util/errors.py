@@ -12,15 +12,15 @@ class UserNotFound(Exception):
 
 @app.errorhandler(SnippetNotFound)
 def snippet_not_found(e):
-	"""Custom errorhandler that renders a '404 snippet
-	not found' template"""
+    """Custom errorhandler that renders a '404 snippet
+    not found' template"""
     message = "The snippet you are looking for does not exist."
     return render_template('errorpages/404.html', message=message), 404
 
 
 @app.errorhandler(UserNotFound)
 def user_not_found(e):
-	"""Custom errorhandler that renders a '404 user
-	not found' template"""
+    """Custom errorhandler that renders a '404 user
+    not found' template"""
     message = "The user you are looking for does not exist."
     return render_template('errorpages/404.html', message=message), 404
