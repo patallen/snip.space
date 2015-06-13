@@ -2,10 +2,11 @@ from app import app
 from app.models import Snippet, User
 from hashids import Hashids
 from .errors import SnippetNotFound, UserNotFound
-from flask import render_template
+
 
 def getSnippetByUuid(uuid):
-    """Return a snippet by it's UUID (hashid)"""
+    """Return a snippet by it's UUID (hashid) or raises a
+    SnippetNotFound exception that renders 404"""
     hashid = Hashids(salt=app.config['HASHID_SALT'],
                      min_length=app.config['HASHID_LEN'])
     # If snippet doesn't exist, SnippetNotFound will 404
@@ -19,6 +20,8 @@ def getSnippetByUuid(uuid):
 
 
 def getUserByUsername(username):
+    """Returns a use by it's email address or raises
+    a UserNotFound exception that renders 404"""
     try:
         user = User.query.filter(User.username==username).one()
     except:

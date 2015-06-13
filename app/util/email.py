@@ -2,14 +2,19 @@ from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 import sendgrid
 from app import app
 
+
 serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 
 def generateToken(email):
+	"""Generates a token from the user's email address
+	that will be used to confirm his or her email"""
     return serializer.dumps(email, salt=app.config['EMAIL_CONF_SALT'])
 
 
 def decodeToken(token):
+	"""Takes a token created by generateToken and
+	decodes it back into the user's email address"""
     email = serializer.loads(
         token,
         salt = app.config['EMAIL_CONF_SALT'],
@@ -19,7 +24,7 @@ def decodeToken(token):
 
 
 def sendEmail(to_email, subject, body):
-    """Use sendgrid's api to send email from noreply@snip.space"""
+    """Uses sendgrid's api to send email from noreply@snip.space"""
     sg = sendgrid.SendGridClient(
         app.config['SENDGRID_API_USER'],
         app.config['SENDGRID_API_KEY']

@@ -155,6 +155,9 @@ def signup():
 
 @app.route('/confirm/<path:confirm_token>/')
 def confirm_email(confirm_token):
+    """Route takes a token that is sent to users to confirm
+    an email address. If email address exists in the database,
+    the user's confirmed status is set to true."""
     try:
         email = decodeToken(confirm_token)
     except SignatureExpired:
@@ -199,5 +202,6 @@ def login():
 @app.route('/logout/')
 @login_required
 def logout():
+    """Route logs a user out of the session"""
     logout_user()
     return redirect(url_for('index'))
