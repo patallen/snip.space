@@ -1,5 +1,5 @@
 from app import app, db, login_manager
-from app.forms import SnippetForm, SignupForm, LoginForm, DeleteForm
+from app.forms import SnippetForm, SignupForm, LoginForm, DeleteForm, ChangePasswordForm
 from app.models import Snippet, User, Language
 from datetime import datetime
 from flask import render_template, redirect, url_for, abort
@@ -147,6 +147,23 @@ def user_page(username):
 
     snippets = snipQuery.paginate(int(page), 10, False)
     return render_template('user.html', user=user, snippets=snippets)
+
+
+@app.route('/settings/', methods=['GET', 'POST'])
+@login_required
+def user_settings():
+    """Route for users to customize their settings"""
+    pw_form = ChangePasswordForm()
+    if pw_form.validate_on_submit():
+        # If new password is not equal to old
+        if not current_user.validate_pass(pw_form.newpw.data):
+            current_user.password = pw_form.newpw.data
+            flash('Password successfuly changed!', 'info')
+            db.session.add(current_user)
+            db.session.commit()
+        else:
+            flash('Password must differ from the old.', 'danger')
+    return render_template('settings.html', pw_form=pw_form) 
 
 
 @app.route('/signup/', methods=['POST', 'GET'])

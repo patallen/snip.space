@@ -21,7 +21,7 @@
 				<div class = "options">
 					<a href="{{ url_for('user_page', username=current_user.username) }}">My Snippets </a>
 					|
-					<a href="#">Settings</a>
+					<a href="{{ url_for('user_settings') }}">Settings</a>
 				</div>
 				<a class="btn btn-default" href="{{ url_for('logout') }}">Logout</a>
 				{% endif %}

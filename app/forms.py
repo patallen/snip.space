@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from wtforms import TextAreaField, StringField, BooleanField
 from wtforms import PasswordField, SelectField, SubmitField
-from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Regexp
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Regexp, Length
 from app.models import User, Language
 
 
@@ -13,6 +13,7 @@ def unique_email(form, field):
     if User.query.filter(User.email==field.data).first():
         raise ValidationError('Already taken.')
 
+
 class SnippetForm(Form):
     title = StringField('Title')
     snippet = TextAreaField('snippet', validators=[DataRequired()])
@@ -22,7 +23,7 @@ class SnippetForm(Form):
 class SignupForm(Form):
     email = StringField('Email', validators=[DataRequired(), Email(), unique_email])
     username = StringField('Username', validators=[DataRequired(), unique_username, Regexp('^\w+$')])
-    password = PasswordField('Password', validators=[DataRequired(), EqualTo('confirm', message='Passwords must mach.')])
+    password = PasswordField('Password', validators=[DataRequired(), EqualTo('confirm', message='Passwords must match.')])
     confirm = PasswordField('Confirm Password')
 
 class LoginForm(Form):
@@ -31,3 +32,10 @@ class LoginForm(Form):
 
 class DeleteForm(Form):
     delete = SubmitField('DELETE')
+
+class ChangePasswordForm(Form):
+    newpw = PasswordField('New Password',
+                          validators=[DataRequired(message="Both fields are required."),
+                                      Length(min=8, message="Password must be atleast 8 characters."),
+                                      EqualTo('confirmpw', message='Passwords do not match.')])
+    confirmpw = PasswordField('Confirm New Password', validators=[DataRequired()])
