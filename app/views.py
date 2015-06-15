@@ -145,7 +145,7 @@ def user_page(username):
     if current_user != user:
         snipQuery = snipQuery.filter(Snippet.private == False)
 
-    snippets = snipQuery.paginate(int(page), 10, False)
+    snippets = snipQuery.paginate(int(page), app.config['SNIPPETS_PER_PAGE'], False)
     return render_template('user.html', user=user, snippets=snippets)
 
 

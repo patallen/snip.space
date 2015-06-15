@@ -14,3 +14,5 @@ SENDGRID_API_KEY = 'sendgrid_password'
 
 EMAIL_CONF_SALT = '3x4mpl3_s4Lt_2' # Salt used for generating email confirmation token
 CONFIRM_EMAIL_EXP = 3600 # Time in seconds before confirmation expires
+
+SNIPPETS_PER_PAGE = 10
