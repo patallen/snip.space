@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <h3>Snippets by <em>{{ user.username }}</em></h3>
+{% if snippets.items %}
 <table class="table table-striped">
 	<thead>
 		<th class="col-sm-4">Title</th>
@@ -72,4 +73,11 @@
 		{% endif %}
 	</ul>
 </nav>
+{% else %}
+	{% if current_user == user %}
+	You currently have no snippets. <a href="/">Add some!</a>
+	{% else %}
+	This user currently has no public snippets.
+	{% endif %}
+{% endif %}
 {% endblock %}
