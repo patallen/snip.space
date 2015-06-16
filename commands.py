@@ -5,7 +5,7 @@ from datetime import datetime
 
 
 languages = [
-    ('', 'Text', '.txt'),
+    ('text', 'Text', '.txt'),
     ('clojure', 'Clojure', '.clj'),
     ('css', 'CSS', '.css'),
     ('clike', 'C/C++', '.cpp'),
