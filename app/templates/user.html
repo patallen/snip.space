@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
+{% import 'macros/items.html' as items  with context %}
 {% block content %}
 <h3>Snippets by <em>{{ user.username }}</em></h3>
 {% if snippets.items %}
 <table class="table table-striped">
 	<thead>
-		<th class="col-sm-4"><a href="{{ url_for('user_page', username=user.username, orderBy='title') }}">Title</a></th>
-		<th><a href="{{ url_for('user_page', username=user.username, orderBy='date') }}">Date Added</a></th>
+		<th class="col-sm-4">{{ items.sort('title', 'Title') }}</th>
+		<th>{{ items.sort('date', 'Date Added') }}</th>
 		<th class="col-sm-2">Syntax</th>
-		<th class="col-sm-2"><a href="{{ url_for('user_page', username=user.username, orderBy='views') }}">Views</a></th>
+		<th class="col-sm-2">{{ items.sort('views', 'Views') }}</th>
 		{% if current_user == user %}
 		<th class="col-sm-1">Actions</th>
 		{% endif %}

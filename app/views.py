@@ -135,24 +135,34 @@ def user_page(username):
     """Route returns snippets and their info for
     snippets created by specified user"""
     user = getUserByUsername(username)
-    orderBy = request.args.get('orderBy')
+
+    # set order_by variables based on querystring
+    direction = request.args.get('dir', 'asc')
+    field = request.args.get('sort', 'date')
 
     # set page to 1 in case it wasn't specified
     page = 1
     if request.args.get('page'):
         page = request.args.get('page')
-    
+   
+    # set base query for user's snippets
     snipQuery = Snippet.query.filter(Snippet.user == user)
     if current_user != user:
         snipQuery = snipQuery.filter(Snippet.private == False)
 
-    if orderBy == 'date':
-        snipQuery = snipQuery.order_by(Snippet.date_added.desc())
-    elif orderBy == 'views':
-        snipQuery = snipQuery.order_by(Snippet.hits.desc())
-    elif orderBy  == 'title':
-        snipQuery = snipQuery.order_by(Snippet.title)
+    # ensure direction and field are valid
+    if field not in ('date', 'title', 'views'):
+        field = 'title'
+    else:
+        if field == 'date':
+            field = 'date_added'
+        if field == 'views':
+            field = 'hits'
+    if direction not in ('desc', 'asc'):
+        direction = 'asc'
 
+    sort_by = '{} {}'.format(field, direction)
+    snipQuery = snipQuery.order_by(sort_by)
 
     snippets = snipQuery.paginate(int(page), app.config['SNIPPETS_PER_PAGE'], False)
     return render_template('user.html', user=user, snippets=snippets)
