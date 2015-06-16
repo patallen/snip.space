@@ -4,10 +4,10 @@
 {% if snippets.items %}
 <table class="table table-striped">
 	<thead>
-		<th class="col-sm-4">Title</th>
-		<th>Date Added</th>
+		<th class="col-sm-4"><a href="{{ url_for('user_page', username=user.username, orderBy='title') }}">Title</a></th>
+		<th><a href="{{ url_for('user_page', username=user.username, orderBy='date') }}">Date Added</a></th>
 		<th class="col-sm-2">Syntax</th>
-		<th class="col-sm-2">Views</th>
+		<th class="col-sm-2"><a href="{{ url_for('user_page', username=user.username, orderBy='views') }}">Views</a></th>
 		{% if current_user == user %}
 		<th class="col-sm-1">Actions</th>
 		{% endif %}

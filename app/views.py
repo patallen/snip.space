@@ -135,6 +135,7 @@ def user_page(username):
     """Route returns snippets and their info for
     snippets created by specified user"""
     user = getUserByUsername(username)
+    orderBy = request.args.get('orderBy')
 
     # set page to 1 in case it wasn't specified
     page = 1
@@ -144,6 +145,14 @@ def user_page(username):
     snipQuery = Snippet.query.filter(Snippet.user == user)
     if current_user != user:
         snipQuery = snipQuery.filter(Snippet.private == False)
+
+    if orderBy == 'date':
+        snipQuery = snipQuery.order_by(Snippet.date_added.desc())
+    elif orderBy == 'views':
+        snipQuery = snipQuery.order_by(Snippet.hits.desc())
+    elif orderBy  == 'title':
+        snipQuery = snipQuery.order_by(Snippet.title)
+
 
     snippets = snipQuery.paginate(int(page), app.config['SNIPPETS_PER_PAGE'], False)
     return render_template('user.html', user=user, snippets=snippets)
