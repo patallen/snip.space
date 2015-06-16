@@ -151,13 +151,15 @@ def user_page(username):
         snipQuery = snipQuery.filter(Snippet.private == False)
 
     # ensure direction and field are valid
-    if field not in ('date', 'title', 'views'):
+    if field not in ('date', 'title', 'views', 'syntax'):
         field = 'title'
     else:
         if field == 'date':
             field = 'date_added'
         if field == 'views':
             field = 'hits'
+        if field == 'syntax':
+            field = 'language_id'
     if direction not in ('desc', 'asc'):
         direction = 'asc'
 
