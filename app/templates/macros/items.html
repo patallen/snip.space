@@ -2,13 +2,19 @@
 {% set direction = request.args.get('dir', 'asc') %}
 {% set curr = request.args.get('sort') %}
 
+{% if field == curr %}
+	{% set css = 'class=' + direction + ' ' %}
+{% else %}
+	{% set css = '' %}
+{% endif %}
+
 {% if direction == 'asc' and curr == field %}
 	{% set direction = 'desc' %}
 {% else %}
 	{% set direction = 'asc' %}
 {% endif %}
 
-<a href="{{ url_for('user_page',
+<a {{ css }}href="{{ url_for('user_page',
 					username=user.username,
 					sort=field,
 					dir=direction) }}">{{ name }}</a>

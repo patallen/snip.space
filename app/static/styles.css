@@ -50,3 +50,13 @@ body {
 .options-container {
 	margin-bottom: 20px;
 }
+
+th a {color: black }
+.asc::after {
+	content: " \25b2";
+	
+}
+.desc::after {
+	content: " \25bc";
+	
+}

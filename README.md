@@ -16,11 +16,11 @@ An ad-free, free, and open source user-based code snippet/text respository. Sign
 
 ## TODO:
 - [ ] RQ task queue for emails and ..?
-- [ ] User settings page
+- [ ] User settings page (started)
 - [ ] Report snippet functionality
-- [ ] Ability to sort snippets on user page
 - [ ] Password reset functionality
 - [ ] Statistics page
+- [x] Ability to sort snippets on user page
 - [x] User snippet pagination
 - [x] Private snippets
 - [x] Custom 404 exceptions and pages
