@@ -49,6 +49,8 @@ class User(db.Model):
     confirmed = db.Column(db.Boolean, default=False)
     confirmed_date = db.Column(db.DateTime)
     _password_hash = db.Column(db.String)
+    default_language_id = db.Column(db.String, db.ForeignKey('language.id'))
+    default_language = db.relationship('Language')
 
     def __init__(self, username, email, password):
         self.password = password.encode('utf-8')

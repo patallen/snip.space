@@ -1,5 +1,5 @@
 from app import app, db, login_manager
-from app.forms import SnippetForm, SignupForm, LoginForm, DeleteForm, ChangePasswordForm
+from app.forms import SnippetForm, SignupForm, LoginForm, DeleteForm, ChangePasswordForm, PreferencesForm
 from app.models import Snippet, User, Language
 from datetime import datetime
 from flask import render_template, redirect, url_for, abort
@@ -172,8 +172,19 @@ def user_page(username):
 @login_required
 def user_settings():
     """Route for users to customize their settings"""
+    prefs_form = PreferencesForm()
+    populateChoiceField(prefs_form)
+    if prefs_form.validate_on_submit():
+        current_user.default_language = Language.query.get(prefs_form.language.data)
+        db.session.add(current_user)
+        db.session.commit()
+        flash('Your preferences have been saved!')
+    if current_user.default_language:
+        prefs_form.language.default = current_user.default_language_id 
+        prefs_form.process()
+    """
     pw_form = ChangePasswordForm()
-    if pw_form.validate_on_submit():
+    if pw_form.validate_on_submit() and request['form']=='pass':
         # If new password is not equal to old
         if not current_user.validate_pass(pw_form.newpw.data):
             current_user.password = pw_form.newpw.data
@@ -182,7 +193,8 @@ def user_settings():
             db.session.commit()
         else:
             flash('Password must differ from the old.', 'danger')
-    return render_template('settings.html', pw_form=pw_form) 
+      """           
+    return render_template('settings.html', prefs_form=prefs_form) 
 
 
 @app.route('/signup/', methods=['POST', 'GET'])
