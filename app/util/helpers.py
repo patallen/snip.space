@@ -11,6 +11,6 @@ def populateChoiceField(form, current_user=None):
     for i, lang in enumerate(languages):
         if lang[0] == 'text':
             text = languages.pop(i)
+            languages.insert(0, text)
             break
-    languages.insert(0, text)
     form.language.choices = languages
