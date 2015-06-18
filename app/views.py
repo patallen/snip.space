@@ -32,6 +32,9 @@ def index():
         db.session.add(s)
         db.session.commit()
         return redirect(url_for('show_snippet', snippet_uuid=s.get_uuid()))
+    if current_user.is_authenticated() and current_user.default_language:
+        snippet_form.language.default = current_user.default_language_id
+        snippet_form.process()
 
     return render_template('index.html', form=snippet_form)
 
@@ -178,13 +181,21 @@ def user_settings():
         current_user.default_language = Language.query.get(prefs_form.language.data)
         db.session.add(current_user)
         db.session.commit()
-        flash('Your preferences have been saved!')
+        flash('Your preferences have been saved!', 'success')
+
     if current_user.default_language:
         prefs_form.language.default = current_user.default_language_id 
         prefs_form.process()
-    """
+    
+    return render_template('settings.html', prefs_form=prefs_form) 
+
+
+@app.route('/changepass/', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    """Route for logged in users to change password"""
     pw_form = ChangePasswordForm()
-    if pw_form.validate_on_submit() and request['form']=='pass':
+    if pw_form.validate_on_submit():
         # If new password is not equal to old
         if not current_user.validate_pass(pw_form.newpw.data):
             current_user.password = pw_form.newpw.data
@@ -193,8 +204,8 @@ def user_settings():
             db.session.commit()
         else:
             flash('Password must differ from the old.', 'danger')
-      """           
-    return render_template('settings.html', prefs_form=prefs_form) 
+
+    return render_template('change_password.html', pw_form=pw_form) 
 
 
 @app.route('/signup/', methods=['POST', 'GET'])
