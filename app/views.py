@@ -250,6 +250,7 @@ def confirm_email(confirm_token):
     user.confirmed_date = datetime.utcnow()
     db.session.add(user)
     db.session.commit()
+    flash('Your email has been confirmed! You man now log in.', 'success')
     return redirect(url_for('login'))
 
 
