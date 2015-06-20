@@ -224,7 +224,7 @@ def signup():
         email_body = 'Welcome to snip.space! <a href="{}">Click here</a> to confirm your email!'\
         .format(url_for('confirm_email', confirm_token=confirm_token, _external=True))
 
-        sendEmail(email, 'Confirm snip.space Email Address', email_body)
+        sendEmail.delay(email, 'Confirm snip.space Email Address', email_body)
         flash('Check your email for a confirmation link!', 'info')
         return redirect(url_for('login'))
     return render_template('signup.html', form=signup_form)

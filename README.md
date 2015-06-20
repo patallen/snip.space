@@ -15,11 +15,11 @@ An ad-free, free, and open source user-based code snippet/text respository. Sign
 1. To run server: `python manage.py runserver`
 
 ## TODO:
-- [ ] RQ task queue for emails and ..?
 - [ ] User settings page (started)
 - [ ] Report snippet functionality
 - [ ] Password reset functionality
 - [ ] Statistics page
+- [x] Celery task queue for emails and ..?
 - [x] Ability to sort snippets on user page
 - [x] User snippet pagination
 - [x] Private snippets
