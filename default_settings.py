@@ -16,3 +16,7 @@ EMAIL_CONF_SALT = '3x4mpl3_s4Lt_2' # Salt used for generating email confirmation
 CONFIRM_EMAIL_EXP = 3600 # Time in seconds before confirmation expires
 
 SNIPPETS_PER_PAGE = 10
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+

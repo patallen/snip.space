@@ -1,6 +1,6 @@
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 import sendgrid
-from app import app
+from app import app, celery
 
 
 serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
@@ -22,7 +22,7 @@ def decodeToken(token):
     )
     return email
 
-
+@celery.task
 def sendEmail(to_email, subject, body):
     """Uses sendgrid's api to send email from noreply@snip.space"""
     sg = sendgrid.SendGridClient(
