@@ -1,21 +1,73 @@
 {% macro sort(field, name) -%}
-{% set direction = request.args.get('dir', 'asc') %}
-{% set curr = request.args.get('sort') %}
+	{% set direction = request.args.get('dir', 'asc') %}
+	{% set curr = request.args.get('sort') %}
 
-{% if field == curr %}
-	{% set css = 'class=' + direction + ' ' %}
-{% else %}
-	{% set css = '' %}
-{% endif %}
+	{% if field == curr %}
+		{% set css = 'class=' + direction + ' ' %}
+	{% else %}
+		{% set css = '' %}
+	{% endif %}
 
-{% if direction == 'asc' and curr == field %}
-	{% set direction = 'desc' %}
-{% else %}
-	{% set direction = 'asc' %}
-{% endif %}
+	{% if direction == 'asc' and curr == field %}
+		{% set direction = 'desc' %}
+	{% else %}
+		{% set direction = 'asc' %}
+	{% endif %}
 
-<a {{ css }}href="{{ url_for('user_page',
-					username=user.username,
-					sort=field,
-					dir=direction) }}">{{ name }}</a>
+	<a {{ css }}href="{{ url_for('user_page',
+						username=user.username,
+						sort=field,
+						dir=direction) }}">{{ name }}</a>
+{%- endmacro %}
+
+{% macro paginate(route_url, page_obj, kwargs) -%}
+<nav class="text-center">
+	<ul class="pagination">
+		{% if page_obj.has_prev %}
+		<li>
+			{% if kwargs %}
+			<a href="{{ url_for(route_url, page=page_obj.prev_num, **kwargs) }}"><span aria-hidden="true">&laquo;</span></a>
+			{% else %}
+			<a href="{{ url_for(route_url, page=page_obj.prev_num) }}"><span aria-hidden="true">&laquo;</span></a>
+			{% endif %}
+		</li>
+		{% else %}
+		<li class="disabled">
+			<span aria-hidden="true">&laquo;</span>
+		</li>
+		{% endif %}
+		{% for page in page_obj.iter_pages() %}
+			{% if page %}
+			<li>
+				{% if page != snippets.page %}
+					{% if kwargs %}
+					<a href="{{ url_for(route_url, page=page, **kwargs) }}">{{ page }}</a>
+					{% else %}
+					<a href="{{ url_for(route_url, page=page) }}">{{ page }}</a>
+					{% endif %}
+				{% else %}
+			<li class="active">
+				<a href="">{{ page }}</a>
+				{% endif %}
+			{% else %}
+			<li class="disabled">
+				<span class=ellipsis>...</span>
+			{% endif %}
+			</li>
+		{% endfor %}
+		{% if page_obj.has_next %}
+		<li>
+			{% if kwargs %}
+			<a href="{{ url_for(route_url, page=page_obj.next_num, **kwargs) }}"><span aria-hidden="true">&raquo;</span></a>
+			{% else %}
+			<a href="{{ url_for(route_url, page=page_obj.next_num) }}"><span aria-hidden="true">&raquo;</span></a>
+			{% endif %}
+		</li>
+		{% else %}
+		<li class="disabled">
+			<span aria-hidden="true">&raquo;</span>
+		</li>
+		{% endif %}
+	</ul>
+</nav>
 {%- endmacro %}

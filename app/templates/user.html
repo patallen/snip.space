@@ -37,43 +37,10 @@
 		{% endfor %}
 	</tbody>
 </table>
-<nav class="text-center">
-	<ul class="pagination">
-		{% if snippets.has_prev %}
-		<li>
-			<a href="{{ url_for('user_page', username=user.username, page=snippets.prev_num) }}"><span aria-hidden="true">&laquo;</span></a>
-		</li>
-		{% else %}
-		<li class="disabled">
-			<span aria-hidden="true">&laquo;</span>
-		</li>
-		{% endif %}
-		{% for page in snippets.iter_pages() %}
-			{% if page %}
-			<li>
-				{% if page != snippets.page %}
-					<a href="{{ url_for('user_page', username=user.username, page=page) }}">{{ page }}</a>
-				{% else %}
-			<li class="active">
-				<a href="">{{ page }}</a>
-				{% endif %}
-			{% else %}
-			<li class="disabled">
-				<span class=ellipsis>...</span>
-			{% endif %}
-			</li>
-		{% endfor %}
-		{% if snippets.has_next %}
-		<li>
-			<a href="{{ url_for('user_page', username=user.username, page=snippets.next_num) }}"><span aria-hidden="true">&raquo;</span></a>
-		</li>
-		{% else %}
-		<li class="disabled">
-			<span aria-hidden="true">&raquo;</span>
-		</li>
-		{% endif %}
-	</ul>
-</nav>
+
+<!-- Use pagination macro -->
+{{ items.paginate('user_page', snippets, {'username': user.username}) }}
+
 {% else %}
 	{% if current_user == user %}
 	You currently have no snippets. <a href="/">Add some!</a>
