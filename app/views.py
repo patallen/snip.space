@@ -254,6 +254,17 @@ def confirm_email(confirm_token):
     return redirect(url_for('login'))
 
 
+@app.route('/recent/')
+def recent_snippets():
+    """Route shows recent public snippets ordered by date"""
+    page = 1
+    if request.args.get('page'):
+        page = request.args.get('page')
+    snippets = Snippet.query.filter_by(private=False).order_by(Snippet.date_added.desc())
+    snippets = snippets.paginate(int(page), app.config['SNIPPETS_PER_PAGE'], False)
+    return render_template('recent_snippets.html', snippets=snippets)
+
+
 @app.route('/login/', methods=['POST', 'GET'])
 def login():
     """Log in users if they are registered and confirmed,
