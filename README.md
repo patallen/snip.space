@@ -15,10 +15,14 @@ An ad-free, free, and open source user-based code snippet/text respository. Sign
 1. To run server: `python manage.py runserver`
 
 ## TODO:
+- [ ] Pagination macro
+- [ ] Admin portal
 - [ ] User settings page (started)
 - [ ] Report snippet functionality
 - [ ] Password reset functionality
 - [ ] Statistics page
+- [ ] Trending/Popular by timeframe page
+- [x] Recent Snippets Page
 - [x] Celery task queue for emails and ..?
 - [x] Ability to sort snippets on user page
 - [x] User snippet pagination
