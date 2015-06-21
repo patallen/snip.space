@@ -11,6 +11,9 @@
 	<nav class="navbar navbar-inverse navbar-static-top">
 		<div class="container">
 			<a class="navbar-brand" href="{{ url_for('index') }}"><i class="fa fa-rocket"></i> snip.space</a>
+			<ul class="nav navbar-nav navbar-left">
+				<li><a href="{{ url_for('recent_snippets') }}">Recent</a></li>
+			</ul>
 			<div class="navbar-form navbar-right">
 				<div class="form-group">
 				{% if current_user.is_anonymous() %}
