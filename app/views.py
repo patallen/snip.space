@@ -1,7 +1,7 @@
 from app import app, db, login_manager
 from app.forms import SnippetForm, SignupForm, LoginForm, DeleteForm, ChangePasswordForm, PreferencesForm
 from app.models import Snippet, User, Language
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from flask import render_template, redirect, url_for, abort
 from flask import Response, make_response, flash, request
 from flask_login import login_user, logout_user, current_user, login_required
@@ -256,12 +256,20 @@ def confirm_email(confirm_token):
 
 @app.route('/recent/')
 def recent_snippets():
-    """Route shows recent public snippets ordered by date"""
+    """Route shows recent public snippets in the
+    last 5 days, ordered by date_added"""
     page = 1
     if request.args.get('page'):
         page = request.args.get('page')
-    snippets = Snippet.query.filter_by(private=False).order_by(Snippet.date_added.desc())
-    snippets = snippets.paginate(int(page), app.config['SNIPPETS_PER_PAGE'], False)
+    
+    # Get date 5 days ago to query back to
+    from_date = date.today() - timedelta(days=5)
+    snippets = Snippet.query.filter_by(private=False)\
+                            .filter(Snippet.date_added > from_date)\
+                            .order_by(Snippet.date_added.desc())
+    snippets = snippets.paginate(int(page),
+                                 app.config['SNIPPETS_PER_PAGE'],
+                                 False)
     return render_template('recent_snippets.html', snippets=snippets)
 
 
