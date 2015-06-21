@@ -1,21 +1,32 @@
 {% extends 'base.html' %}
 {% block content %}
-{% for msg in get_flashed_messages() %}
-{{ msg }}
-{% endfor %}
-<form action="{{ url_for('request_reset') }}" method='POST'>
-	{{ form.csrf_token }}
-	<h2 class="text-center">Request Password Reset</h2>
-	<div class="row">
-		<div class="col-xs-offset-4 col-xs-4">
-			<div class="well well-sm text-center">
-				Enter the email associated with the account you need to reset the password for.
-			</div>
-			<div class="form-group">
-			{{ form.email(class="form-control", placeholder="enter email address...") }}
-			</div>
-			<input class="btn btn-primary btn-block" value='Submit Request' type=submit>
-		</div>
+<div class="row">
+{% for category, msg in get_flashed_messages(with_categories=true) %}
+	<div class="col-sm-offset-3 col-sm-6 text-center alert alert-{{ category }}">
+		<i class="fa fa-exclamation-triangle"> </i>&nbsp;{{ msg }}
 	</div>
-</form>
+{% endfor %}
+</div>
+<div class="row">
+	<h2 class="text-center"> Request Password Reset</h2>
+	<form action="{{ url_for('request_reset') }}" method='POST'>
+		{{ form.csrf_token }}
+		<div class="row">
+			<div class="col-xs-offset-4 col-xs-4">
+				<div class="well well-sm text-center">
+					Enter the email associated with the account you need to reset the password for.
+				</div>
+				<div class="form-group">
+					{% for error in form.email.errors %}
+					<div class="text-center alert-warning">
+						{{ error }}
+					</div>
+					{% endfor %}
+				{{ form.email(class="form-control", placeholder="enter email address...") }}
+				</div>
+				<input class="btn btn-primary btn-block" value='Submit Request' type=submit>
+			</div>
+		</div>
+	</form>
+</div>
 {% endblock %}

@@ -294,7 +294,9 @@ def request_reset():
                          Check your email, and follow the provided link 
                          to continue.""".format(email)
             return render_template('message.html', title="Reset Email Sent", message=message)
-        return redirect(url_for('request_reset'))
+        else:
+            flash('Email not found in our records.', 'danger')
+            return redirect(url_for('request_reset'))
 
     return render_template('request_reset.html', form=form)
 
