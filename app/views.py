@@ -289,7 +289,11 @@ def request_reset():
             email_body ='<a href="{}">Click here</a> to reset your snip.space password.'\
                     .format(url_for('reset_password', reset_token=reset_token, _external=True))
             sendEmail.delay(email, 'Password Reset for snip.space', email_body)
-            flash('Please check your email for a link to reset your password.', 'info')
+            message = """A link to reset your password has been 
+                         sent to the email address <strong>{}</strong>. 
+                         Check your email, and follow the provided link 
+                         to continue.""".format(email)
+            return render_template('message.html', title="Reset Email Sent", message=message)
         return redirect(url_for('request_reset'))
 
     return render_template('request_reset.html', form=form)
