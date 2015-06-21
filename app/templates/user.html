@@ -39,7 +39,7 @@
 </table>
 
 <!-- Use pagination macro -->
-{{ items.paginate('user_page', snippets, {'username': user.username}) }}
+{{ items.paginate(snippets) }}
 
 {% else %}
 	{% if current_user == user %}

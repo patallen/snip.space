@@ -20,16 +20,16 @@
 						dir=direction) }}">{{ name }}</a>
 {%- endmacro %}
 
-{% macro paginate(route_url, page_obj, kwargs) -%}
+{% macro paginate(page_obj) -%}
+{% set args = request.view_args %}
+{% if args['page'] %}
+	{% set _ = args.pop('page') %}
+{% endif %}
 <nav class="text-center">
 	<ul class="pagination">
 		{% if page_obj.has_prev %}
 		<li>
-			{% if kwargs %}
-			<a href="{{ url_for(route_url, page=page_obj.prev_num, **kwargs) }}"><span aria-hidden="true">&laquo;</span></a>
-			{% else %}
-			<a href="{{ url_for(route_url, page=page_obj.prev_num) }}"><span aria-hidden="true">&laquo;</span></a>
-			{% endif %}
+			<a href="{{ url_for(request.endpoint, page=page_obj.prev_num, **args) }}"><span aria-hidden="true">&laquo;</span></a>
 		</li>
 		{% else %}
 		<li class="disabled">
@@ -40,11 +40,7 @@
 			{% if page %}
 			<li>
 				{% if page != snippets.page %}
-					{% if kwargs %}
-					<a href="{{ url_for(route_url, page=page, **kwargs) }}">{{ page }}</a>
-					{% else %}
-					<a href="{{ url_for(route_url, page=page) }}">{{ page }}</a>
-					{% endif %}
+					<a href="{{ url_for(request.endpoint, page=page, **args) }}">{{ page }}</a>
 				{% else %}
 			<li class="active">
 				<a href="">{{ page }}</a>
@@ -57,11 +53,7 @@
 		{% endfor %}
 		{% if page_obj.has_next %}
 		<li>
-			{% if kwargs %}
-			<a href="{{ url_for(route_url, page=page_obj.next_num, **kwargs) }}"><span aria-hidden="true">&raquo;</span></a>
-			{% else %}
-			<a href="{{ url_for(route_url, page=page_obj.next_num) }}"><span aria-hidden="true">&raquo;</span></a>
-			{% endif %}
+			<a href="{{ url_for(request.endpoint, page=page_obj.next_num, **args) }}"><span aria-hidden="true">&raquo;</span></a>
 		</li>
 		{% else %}
 		<li class="disabled">
