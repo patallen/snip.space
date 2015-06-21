@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+{% for msg in get_flashed_messages() %}
+{{ msg }}
+{% endfor %}
+<form action="{{ url_for('request_reset') }}" method='POST'>
+	{{ form.csrf_token }}
+	{{ form.email(class="form-control") }}
+	<input value='Request Reset' type=submit>
+</form>
+{% endblock %}

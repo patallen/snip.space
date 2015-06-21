@@ -1,5 +1,5 @@
 from app import app, db, login_manager
-from app.forms import SnippetForm, SignupForm, LoginForm, DeleteForm, ChangePasswordForm, PreferencesForm
+from app.forms import SnippetForm, SignupForm, LoginForm, DeleteForm, ChangePasswordForm, PreferencesForm, RequestResetForm, PasswordResetForm
 from app.models import Snippet, User, Language
 from datetime import datetime, date, timedelta
 from flask import render_template, redirect, url_for, abort
@@ -271,6 +271,52 @@ def recent_snippets():
                                  app.config['SNIPPETS_PER_PAGE'],
                                  False)
     return render_template('recent_snippets.html', snippets=snippets)
+
+
+@app.route('/request-reset/', methods=['GET', 'POST'])
+def request_reset():
+    form = RequestResetForm()
+
+    if form.validate_on_submit():
+        user = None
+        try:
+            user = User.query.filter(User.email == form.email.data).one()
+        except:
+            pass
+        if user:
+            email = user.email
+            reset_token = generateToken(email) 
+            email_body ='<a href="{}">Click here</a> to reset your snip.space password.'\
+                    .format(url_for('reset_password', reset_token=reset_token, _external=True))
+            sendEmail.delay(email, 'Password Reset for snip.space', email_body)
+            flash('Please check your email for a link to reset your password.', 'info')
+        return redirect(url_for('request_reset'))
+
+    return render_template('request_reset.html', form=form)
+
+
+@app.route('/reset/<path:reset_token>/', methods=['GET', 'POST'])
+def reset_password(reset_token):
+    try:
+        email = decodeToken(reset_token)
+    except SignatureExpired:
+        return "This token has expired." 
+    except BadSignature:
+        return "Invalid token." 
+
+    form = PasswordResetForm()
+
+    if form.validate_on_submit():
+        user = User.query.filter(User.email == email).one()
+        if email != form.email.data:
+            flash('Email not valid', 'danger')
+        else:
+            user.password = form.password.data
+            db.session.add(user)
+            db.session.commit()
+            flash('Your password has been reset. Log in!', 'success')
+            return redirect(url_for('login'))
+    return render_template('reset_password.html', form=form, reset_token=reset_token)            
 
 
 @app.route('/login/', methods=['POST', 'GET'])

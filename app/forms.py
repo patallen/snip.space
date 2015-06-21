@@ -1,6 +1,7 @@
 from flask_wtf import Form
 from wtforms import TextAreaField, StringField, BooleanField
 from wtforms import PasswordField, SelectField, SubmitField
+from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Regexp, Length
 from app.models import User, Language
 
@@ -35,6 +36,14 @@ class PreferencesForm(Form):
 
 class DeleteForm(Form):
     delete = SubmitField('DELETE')
+
+class RequestResetForm(Form):
+    email = StringField('Email Address', validators=[DataRequired(), Email()])
+
+class PasswordResetForm(Form):
+    email = StringField('Email Address', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired(), EqualTo('confirm', message='Passwords must match.')])
+    confirm = PasswordField('Confirm Password')
 
 class ChangePasswordForm(Form):
     newpw = PasswordField('New Password',
