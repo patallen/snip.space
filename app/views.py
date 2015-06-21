@@ -297,6 +297,8 @@ def request_reset():
 
 @app.route('/reset/<path:reset_token>/', methods=['GET', 'POST'])
 def reset_password(reset_token):
+    if current_user.is_authenticated():
+        return redirect(url_for('index'))
     try:
         email = decodeToken(reset_token)
     except SignatureExpired:

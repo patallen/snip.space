@@ -5,7 +5,17 @@
 {% endfor %}
 <form action="{{ url_for('request_reset') }}" method='POST'>
 	{{ form.csrf_token }}
-	{{ form.email(class="form-control") }}
-	<input value='Request Reset' type=submit>
+	<h2 class="text-center">Request Password Reset</h2>
+	<div class="row">
+		<div class="col-xs-offset-4 col-xs-4">
+			<div class="well well-sm text-center">
+				Enter the email associated with the account you need to reset the password for.
+			</div>
+			<div class="form-group">
+			{{ form.email(class="form-control", placeholder="enter email address...") }}
+			</div>
+			<input class="btn btn-primary btn-block" value='Submit Request' type=submit>
+		</div>
+	</div>
 </form>
 {% endblock %}
