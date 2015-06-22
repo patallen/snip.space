@@ -19,8 +19,8 @@ An ad-free, free, and open source user-based code snippet/text respository. Sign
 - [ ] User settings page (started)
 - [ ] Report snippet functionality
 - [ ] Statistics page
-- [ ] Flash Message Macro
 - [ ] Trending/Popular by timeframe page
+- [x] Remove flash message redundancy
 - [x] Password reset functionality
 - [x] Pagination macro
 - [x] Recent Snippets Page

@@ -1,13 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="row">
-{% for category, msg in get_flashed_messages(with_categories=true) %}
-	<div class="col-sm-offset-3 col-sm-6 text-center alert alert-{{ category }}">
-		<i class="fa fa-exclamation-triangle"> </i>&nbsp;{{ msg }}
-	</div>
-{% endfor %}
-</div>
-<div class="row">
 	<h2 class="text-center"> Request Password Reset</h2>
 	<form action="{{ url_for('request_reset') }}" method='POST'>
 		{{ form.csrf_token }}

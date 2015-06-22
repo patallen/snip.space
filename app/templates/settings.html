@@ -4,11 +4,6 @@
 <h4>Change Defaults</h4>
 <div class="row">
 	<div class="col-sm-4">
-		{% for category, msg in get_flashed_messages(with_categories=true) %}
-		<div class="alert alert-{{ category }} text-center">
-			{{ msg }}
-		</div>
-		{% endfor %}
 		<form action="{{ url_for('user_settings') }}" method="POST">
 			{{ prefs_form.csrf_token }}
 			<div class="form-group">
