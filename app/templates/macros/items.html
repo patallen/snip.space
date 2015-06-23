@@ -4,11 +4,7 @@
 	{% else %}
 	<li>
 	{% endif %}
-		{% if kwargs %}
 		<a href="{{ url_for(route_func, **kwargs) }}">{{ link_text }}</a>
-		{% else %}
-		<a href="{{ url_for(route_func) }}">{{ link_text }}</a>
-		{% endif %}
 	</li>
 {%- endmacro %}
 
