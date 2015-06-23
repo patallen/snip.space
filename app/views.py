@@ -277,6 +277,7 @@ def recent_snippets():
 
 
 @app.route('/request-reset/', methods=['GET', 'POST'])
+@anonymous_required
 def request_reset():
     form = RequestResetForm()
 
@@ -305,9 +306,8 @@ def request_reset():
 
 
 @app.route('/reset/<path:reset_token>/', methods=['GET', 'POST'])
+@anonymous_required
 def reset_password(reset_token):
-    if current_user.is_authenticated():
-        return redirect(url_for('index'))
     try:
         email = decodeToken(reset_token)
     except SignatureExpired:
