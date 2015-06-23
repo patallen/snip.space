@@ -9,6 +9,7 @@ from util.email import generateToken, decodeToken, sendEmail
 from util.getters import getSnippetByUuid, getUserByUsername
 from util.helpers import populateChoiceField
 from util.errors import Unauthorized
+from util.decorators import anonymous_required
 
 
 @login_manager.user_loader
@@ -211,6 +212,7 @@ def change_password():
 
 
 @app.route('/signup/', methods=['POST', 'GET'])
+@anonymous_required
 def signup():
     """Route for letting a user sign up"""
     signup_form = SignupForm()
@@ -329,6 +331,7 @@ def reset_password(reset_token):
 
 
 @app.route('/login/', methods=['POST', 'GET'])
+@anonymous_required
 def login():
     """Log in users if they are registered and confirmed,
     provided they supply the correct password"""
