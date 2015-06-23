@@ -1,3 +1,4 @@
+{% import 'macros/items.html' as items with context %}
 <html>
 	<head>
 		<title>snip.space</title>
@@ -12,24 +13,20 @@
 		<div class="container">
 			<a class="navbar-brand" href="{{ url_for('index') }}"><i class="fa fa-rocket"></i> snip.space</a>
 			<ul class="nav navbar-nav navbar-left">
-				<li><a href="{{ url_for('recent_snippets') }}">Recent</a></li>
+				{{ items.navlink('recent', 'recent_snippets', 'Recent') }}
 			</ul>
-			<div class="navbar-form navbar-right">
-				<div class="form-group">
-				{% if current_user.is_anonymous() %}
-				<a class="btn btn-default" href="{{ url_for('login') }}">Log In</a>
-				<a class="btn btn-success" href="{{ url_for('signup') }}">Sign Up</a>
-				{% else %}
-				<span class="welcome">Welcome, {{ current_user.username }}</span>
-				<div class = "options">
-					<a href="{{ url_for('user_page', username=current_user.username) }}">My Snippets </a>
-					|
-					<a href="{{ url_for('user_settings') }}">Settings</a>
-				</div>
-				<a class="btn btn-default" href="{{ url_for('logout') }}">Logout</a>
-				{% endif %}
-				</div>
-			</div>
+			{% if current_user.is_anonymous() %}
+			<ul class="nav navbar-nav navbar-right">
+				{{ items.navlink('login', 'login', 'Log In') }}
+				{{ items.navlink('signup', 'signup', 'Sign Up') }}
+			</ul>
+			{% else %}
+			<ul class="nav navbar-nav navbar-right">
+				{{ items.navlink('u', 'user_page', 'My Snippets', username=current_user.username) }}
+				{{ items.navlink('settings', 'user_settings', 'Settings') }}
+				{{ items.navlink('logout', 'logout', 'Logout') }}
+			</ul>
+			{% endif %}
 		</div>
 	</nav>
 	<div class="container">
@@ -44,7 +41,6 @@
 		</div>
 		{% block content %}
 		{% endblock %}
-		
 	</div>
 	<footer class="footer">
 		<div class="container">

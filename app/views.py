@@ -259,11 +259,12 @@ def recent_snippets():
     """Route shows recent public snippets in the
     last 5 days, ordered by date_added"""
     page = 1
+    snippets=None
     if request.args.get('page'):
         page = request.args.get('page')
     
     # Get date 5 days ago to query back to
-    from_date = date.today() - timedelta(days=5)
+    from_date = date.today() - timedelta(days=10)
     snippets = Snippet.query.filter_by(private=False)\
                             .filter(Snippet.date_added > from_date)\
                             .order_by(Snippet.date_added.desc())

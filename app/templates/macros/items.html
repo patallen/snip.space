@@ -1,3 +1,17 @@
+{% macro navlink(url_string, route_func, link_text) -%}
+	{% if url_string in request.path %}
+	<li class="active">
+	{% else %}
+	<li>
+	{% endif %}
+		{% if kwargs %}
+		<a href="{{ url_for(route_func, **kwargs) }}">{{ link_text }}</a>
+		{% else %}
+		<a href="{{ url_for(route_func) }}">{{ link_text }}</a>
+		{% endif %}
+	</li>
+{%- endmacro %}
+
 {% macro sort(field, name) -%}
 	{% set direction = request.args.get('dir', 'asc') %}
 	{% set curr = request.args.get('sort') %}
