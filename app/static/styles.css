@@ -58,5 +58,4 @@ th a {color: black }
 }
 .desc::after {
 	content: " \25bc";
-	
 }
