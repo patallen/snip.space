@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 {% import 'macros/items.html' as items  with context %}
 {% block content %}
+<h2 class="pull-left">{{ view }} Snippets</h2>
+{% if view == 'Popular' %}
+<nav class="timespan-nav pull-right">
+<a href="{{ url_for('popular_snippets', t='week') }}">This Week</a> | 
+<a href="{{ url_for('popular_snippets', t='month') }}">This Month</a> | 
+<a href="{{ url_for('popular_snippets', t='all') }}">All Time</a>
+</nav>
+{% endif %}
 <table class="table table-striped">
 	<thead>
 		<th class="col-sm-6">Title</th>

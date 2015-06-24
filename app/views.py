@@ -273,7 +273,38 @@ def recent_snippets():
     snippets = snippets.paginate(int(page),
                                  app.config['SNIPPETS_PER_PAGE'],
                                  False)
-    return render_template('recent_snippets.html', snippets=snippets)
+    return render_template('recent_snippets.html',
+                            snippets=snippets,
+                            view='Recent')
+
+@app.route('/popular/')
+def popular_snippets():
+    """Route shows popular snippets based on the
+    timeframe in the querystring"""
+    page = request.args.get('page', 1)
+    t = request.args.get('t', 'week')
+
+    # determine time frame based on querystring (t)
+    if t == 'month':
+        from_date = date.today() - timedelta(days=30)
+    elif t == 'year':
+        from_date = date.today() - timedelta(days=365)
+    elif t == 'all':
+        from_date = None
+    else:
+        from_date = date.today() - timedelta(weeks=1)
+
+    snippets = Snippet.query.filter_by(private=False)
+    if from_date:
+        snippets = snippets.filter(Snippet.date_added > from_date)
+                         
+    snippets = snippets.order_by(Snippet.hits.desc())\
+                       .paginate(int(page),
+                                 app.config['SNIPPETS_PER_PAGE'],
+                                 False)
+    return render_template('recent_snippets.html',
+                            snippets=snippets,
+                            view='Popular')
 
 
 @app.route('/request-reset/', methods=['GET', 'POST'])

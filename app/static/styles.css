@@ -51,6 +51,9 @@ body {
 	margin-bottom: 20px;
 }
 
+nav.timespan-nav {
+	padding-top: 30px;
+}
 th a {color: black }
 .asc::after {
 	content: " \25b2";
