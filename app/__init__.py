@@ -20,8 +20,10 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'danger'
 from app.user.views import user
+from app.snippets.views import snippets
 
 app.register_blueprint(user)
+app.register_blueprint(snippets)
 
 
 from app import views
