@@ -1,6 +1,7 @@
 from app import app, db
 from app.models import Language, Snippet
 from app.forms import SnippetForm, DeleteForm
+from app.util.errors import Unauthorized
 from app.util.helpers import populateChoiceField
 from app.util.getters import getSnippetByUuid
 

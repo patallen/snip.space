@@ -1,5 +1,7 @@
-from app import app, login_manager
-from app.forms import LoginForm, RequestResetForm, ChangePasswordForm
+from app import app, db, login_manager
+from app.forms import LoginForm, RequestResetForm
+from app.forms import ChangePasswordForm, PasswordResetForm, SignupForm
+from datetime import datetime
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from app.util.email import generateToken, decodeToken, sendEmail
 from app.util.getters import getUserByUsername
