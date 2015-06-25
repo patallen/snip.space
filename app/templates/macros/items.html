@@ -8,7 +8,7 @@
 
 
 {% macro navlink(url_string, route_func, link_text) -%}
-	{% if url_string in request.path %}
+	{% if route_func == request.endpoint %}
 	<li class="active">
 	{% else %}
 	<li>
