@@ -11,21 +11,21 @@
 	<body class="main">
 	<nav class="navbar navbar-inverse navbar-static-top">
 		<div class="container">
-			<a class="navbar-brand" href="{{ url_for('index') }}"><i class="fa fa-rocket"></i> snip.space</a>
+			<a class="navbar-brand" href="{{ url_for('snippets.index') }}"><i class="fa fa-rocket"></i> snip.space</a>
 			<ul class="nav navbar-nav navbar-left">
-				{{ items.navlink('recent', 'recent_snippets', 'Recent') }}
-				{{ items.navlink('popular', 'popular_snippets', 'Popular') }}
+				{{ items.navlink('recent', 'snippets.recent_snippets', 'Recent') }}
+				{{ items.navlink('popular', 'snippets.popular_snippets', 'Popular') }}
 			</ul>
 			{% if current_user.is_anonymous() %}
 			<ul class="nav navbar-nav navbar-right">
-				{{ items.navlink('login', 'login', 'Log In') }}
-				{{ items.navlink('signup', 'signup', 'Sign Up') }}
+				{{ items.navlink('login', 'user.login', 'Log In') }}
+				{{ items.navlink('signup', 'user.signup', 'Sign Up') }}
 			</ul>
 			{% else %}
 			<ul class="nav navbar-nav navbar-right">
 				{{ items.navlink('u', 'user.snippets', 'My Snippets', username=current_user.username) }}
 				{{ items.navlink('settings', 'user_settings', 'Settings') }}
-				{{ items.navlink('logout', 'logout', 'Logout') }}
+				{{ items.navlink('logout', 'user.logout', 'Logout') }}
 			</ul>
 			{% endif %}
 		</div>

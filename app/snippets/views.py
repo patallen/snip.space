@@ -5,13 +5,13 @@ from app.util.helpers import populateChoiceField
 from app.util.getters import getSnippetByUuid
 
 from datetime import date, timedelta
-from flask import Blueprint, render_template, redirect, url_for, request
+from flask import Blueprint, render_template, redirect, url_for, request, Response, make_response
 from flask_login import login_required, current_user
 
 
-snippets = Blueprint('snippets', __name__, url_prefix='/u')
+snippets = Blueprint('snippets', __name__)
 
-@app.route('/', methods=['GET', 'POST'])
+@snippets.route('/', methods=['GET', 'POST'])
 def index():
     """Route allows users to create a new snippet"""
     snippet_form = SnippetForm()
@@ -26,7 +26,7 @@ def index():
             s.private = snippet_form.private.data
         db.session.add(s)
         db.session.commit()
-        return redirect(url_for('show_snippet', snippet_uuid=s.get_uuid()))
+        return redirect(url_for('snippets.show_snippet', snippet_uuid=s.get_uuid()))
     if current_user.is_authenticated() and current_user.default_language:
         snippet_form.language.default = current_user.default_language_id
         snippet_form.process()
@@ -34,7 +34,7 @@ def index():
     return render_template('snippets/compose.html', form=snippet_form)
 
 
-@app.route('/<path:snippet_uuid>/')
+@snippets.route('/<path:snippet_uuid>/')
 def show_snippet(snippet_uuid):
     """Route shows a snippet given it's 
     unique identifier - displayed in a read only
@@ -50,7 +50,7 @@ def show_snippet(snippet_uuid):
     return render_template('snippets/view.html', snippet=snippet)
 
 
-@app.route('/<path:snippet_uuid>/edit/', methods=['GET', 'POST'])
+@snippets.route('/<path:snippet_uuid>/edit/', methods=['GET', 'POST'])
 @login_required
 def edit_snippet(snippet_uuid):
     """Route allows a user to modify a snippet if
@@ -72,7 +72,7 @@ def edit_snippet(snippet_uuid):
         snippet.private = snippet_form.private.data
         db.session.add(snippet)
         db.session.commit()
-        return redirect(url_for('show_snippet', snippet_uuid=snippet.get_uuid()))
+        return redirect(url_for('snippets.show_snippet', snippet_uuid=snippet.get_uuid()))
 
     snippet_form.title.default = snippet.title
     snippet_form.snippet.default = snippet.body
@@ -83,7 +83,7 @@ def edit_snippet(snippet_uuid):
     return render_template('snippets/compose.html', form=snippet_form, snippet=snippet)   
 
 
-@app.route('/<path:snippet_uuid>/r/')
+@snippets.route('/<path:snippet_uuid>/r/')
 def raw_snippet(snippet_uuid):
     """Route returns the raw text of a snippet
     in a blank page in the browser"""
@@ -91,7 +91,7 @@ def raw_snippet(snippet_uuid):
     return Response(snippet.body, mimetype='text/plain')
 
 
-@app.route('/<path:snippet_uuid>/d/')
+@snippets.route('/<path:snippet_uuid>/d/')
 def download_snippet(snippet_uuid):
     """Route returns a downloadable file containing 
     the raw text of a snippet"""
@@ -108,7 +108,7 @@ def download_snippet(snippet_uuid):
     return response
 
 
-@app.route('/<path:snippet_uuid>/delete/', methods=['GET', 'POST'])
+@snippets.route('/<path:snippet_uuid>/delete/', methods=['GET', 'POST'])
 @login_required
 def delete_snippet(snippet_uuid):
     """Route lets the owner of a snippet delete
@@ -128,7 +128,7 @@ def delete_snippet(snippet_uuid):
     return render_template('snippets/delete.html', form=form, snippet=snippet)
 
 
-@app.route('/popular/')
+@snippets.route('/popular/')
 def popular_snippets():
     """Route shows popular snippets based on the
     timeframe in the querystring"""
@@ -158,7 +158,7 @@ def popular_snippets():
                             view='Popular')
 
 
-@app.route('/recent/')
+@snippets.route('/recent/')
 def recent_snippets():
     """Route shows recent public snippets in the
     last 5 days, ordered by date_added"""
