@@ -64,11 +64,11 @@ class User(db.Model):
 
     @password.setter
     def _set_pass(self, password):
-        self._password_hash = bcrypt.generate_password_hash(password) 
+        self._password_hash = bcrypt.generate_password_hash(password)
 
     def validate_pass(self, password):
         return bcrypt.check_password_hash(self.password, password)
-    
+
     def is_active(self):
         return self.active
 

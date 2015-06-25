@@ -1,25 +1,28 @@
 from app import app, db, login_manager
 from app.forms import LoginForm, RequestResetForm
-from app.forms import ChangePasswordForm, PasswordResetForm, SignupForm
-from datetime import datetime
-from flask import Blueprint, request, render_template, redirect, url_for, flash
-from app.util.email import generateToken, decodeToken, sendEmail
-from app.util.getters import getUserByUsername
+from app.forms import PasswordResetForm, SignupForm
+from app.util.email import generate_token, decode_token, send_email
+from app.util.getters import get_user_by_username
 from app.util.decorators import anonymous_required
 from app.models import Snippet, User
+from datetime import datetime
+from flask import Blueprint, request, render_template, redirect, url_for, flash
 from flask_login import current_user, login_required, logout_user, login_user
+from itsdangerous import SignatureExpired, BadSignature
 
 user = Blueprint('user', __name__)
+
 
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(int(id))
 
+
 @user.route('/u/<path:username>/')
 def snippets(username):
     """Route returns snippets and their info for
     snippets created by specified user"""
-    user = getUserByUsername(username)
+    user = get_user_by_username(username)
 
     # set order_by variables based on querystring
     direction = request.args.get('dir', 'asc')
@@ -29,11 +32,11 @@ def snippets(username):
     page = 1
     if request.args.get('page'):
         page = request.args.get('page')
-   
+
     # set base query for user's snippets
-    snipQuery = Snippet.query.filter(Snippet.user == user)
+    snip_query = Snippet.query.filter_by(user=user)
     if current_user != user:
-        snipQuery = snipQuery.filter(Snippet.private == False)
+        snip_query = snip_query.filter_by(private=False)
 
     # ensure direction and field are valid
     if field not in ('date', 'title', 'views', 'syntax'):
@@ -49,9 +52,11 @@ def snippets(username):
         direction = 'asc'
 
     sort_by = '{} {}'.format(field, direction)
-    snipQuery = snipQuery.order_by(sort_by)
+    snip_query = snip_query.order_by(sort_by)
 
-    snippets = snipQuery.paginate(int(page), app.config['SNIPPETS_PER_PAGE'], False)
+    snippets = snip_query.paginate(int(page),
+                                   app.config['SNIPPETS_PER_PAGE'],
+                                   False)
     return render_template('user/index.html', user=user, snippets=snippets)
 
 
@@ -68,7 +73,7 @@ def login():
         registered_user = User.query.filter_by(username=username).first()
 
         if not registered_user or not registered_user.validate_pass(password):
-            flash('Incorrect username or password', 'danger') 
+            flash('Incorrect username or password', 'danger')
         elif not registered_user.is_confirmed():
             flash('You must confirm your email before logging in.', 'danger')
         else:
@@ -98,11 +103,13 @@ def signup():
                  signup_form.password.data)
         db.session.add(u)
         db.session.commit()
-        confirm_token = generateToken(email)
+        confirm_token = generate_token(email)
         email_body = 'Welcome to snip.space! <a href="{}">Click here</a> to confirm your email!'\
-        .format(url_for('user.confirm_email', confirm_token=confirm_token, _external=True))
+                     .format(url_for('user.confirm_email',
+                                     confirm_token=confirm_token,
+                                     _external=True))
 
-        sendEmail.delay(email, 'Confirm snip.space Email Address', email_body)
+        send_email.delay(email, 'Confirm snip.space Email Address', email_body)
         flash('Check your email for a confirmation link!', 'info')
         return redirect(url_for('user.login'))
     return render_template('user/signup.html', form=signup_form)
@@ -114,11 +121,11 @@ def confirm_email(confirm_token):
     an email address. If email address exists in the database,
     the user's confirmed status is set to true."""
     try:
-        email = decodeToken(confirm_token)
+        email = decode_token(confirm_token)
     except SignatureExpired:
-        return "This token has expired." 
+        return "This token has expired."
     except BadSignature:
-        return "Invalid token." 
+        return "Invalid token."
 
     user = User.query.filter(User.email == email).one()
 
@@ -145,15 +152,21 @@ def request_reset():
             pass
         if user:
             email = user.email
-            reset_token = generateToken(email) 
-            email_body ='<a href="{}">Click here</a> to reset your snip.space password.'\
-                    .format(url_for('user.reset_password', reset_token=reset_token, _external=True))
-            sendEmail.delay(email, 'Password Reset for snip.space', email_body)
-            message = """A link to reset your password has been 
-                         sent to the email address <strong>{}</strong>. 
-                         Check your email, and follow the provided link 
+            reset_token = generate_token(email)
+            email_body = '<a href="{}">Click here</a> to reset your snip.space password.'\
+                         .format(url_for('user.reset_password',
+                                         reset_token=reset_token,
+                                         _external=True))
+            send_email.delay(email,
+                             'Password Reset for snip.space',
+                             email_body)
+            message = """A link to reset your password has been
+                         sent to the email address <strong>{}</strong>.
+                         Check your email, and follow the provided link
                          to continue.""".format(email)
-            return render_template('message.html', title="Reset Email Sent", message=message)
+            return render_template('message.html',
+                                   title="Reset Email Sent",
+                                   message=message)
         else:
             flash('Email not found in our records.', 'danger')
             return redirect(url_for('user.request_reset'))
@@ -165,11 +178,11 @@ def request_reset():
 @anonymous_required
 def reset_password(reset_token):
     try:
-        email = decodeToken(reset_token)
+        email = decode_token(reset_token)
     except SignatureExpired:
-        return "This token has expired." 
+        return "This token has expired."
     except BadSignature:
-        return "Invalid token." 
+        return "Invalid token."
 
     form = PasswordResetForm()
 
@@ -183,5 +196,6 @@ def reset_password(reset_token):
             db.session.commit()
             flash('Your password has been reset. Log in!', 'success')
             return redirect(url_for('user.login'))
-    return render_template('user/reset_password.html', form=form, reset_token=reset_token)
-    
+    return render_template('user/reset_password.html',
+                           form=form,
+                           reset_token=reset_token)

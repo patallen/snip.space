@@ -4,7 +4,7 @@ from hashids import Hashids
 from .errors import SnippetNotFound, UserNotFound
 
 
-def getSnippetByUuid(uuid):
+def get_snippet_by_uuid(uuid):
     """Return a snippet by it's UUID (hashid) or raises a
     SnippetNotFound exception that renders 404"""
     hashid = Hashids(salt=app.config['HASHID_SALT'],
@@ -19,11 +19,11 @@ def getSnippetByUuid(uuid):
     return snippet
 
 
-def getUserByUsername(username):
+def get_user_by_username(username):
     """Returns a use by it's email address or raises
     a UserNotFound exception that renders 404"""
     try:
-        user = User.query.filter(User.username==username).one()
+        user = User.query.filter_by(username=username).one()
     except:
         raise UserNotFound
 
