@@ -1,3 +1,12 @@
+{% macro timelink(timeframe, link_text) -%}
+	{% if request.args.get('t', 'week') == timeframe %}
+	<strong>{{ link_text }}</strong>
+	{% else %}
+	<a href="{{ url_for(request.endpoint, t=timeframe) }}">{{ link_text }}</a>
+	{% endif %}
+{%- endmacro %}
+
+
 {% macro navlink(url_string, route_func, link_text) -%}
 	{% if url_string in request.path %}
 	<li class="active">
