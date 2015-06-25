@@ -21,9 +21,11 @@ login_manager.login_view = 'login'
 login_manager.login_message_category = 'danger'
 from app.user.views import user
 from app.snippets.views import snippets
+from app.settings.views import settings
 
 app.register_blueprint(user)
 app.register_blueprint(snippets)
+app.register_blueprint(settings)
 
 
 from app import views

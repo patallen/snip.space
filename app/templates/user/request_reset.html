@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="row">
-	<h2 class="text-center"> Request Password Reset</h2>
-	<form action="{{ url_for('request_reset') }}" method='POST'>
+	<h2 class="text-center">Request Password Reset</h2>
+	<form action="{{ url_for('user.request_reset') }}" method='POST'>
 		{{ form.csrf_token }}
 		<div class="row">
 			<div class="col-xs-offset-4 col-xs-4">

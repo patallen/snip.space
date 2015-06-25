@@ -1,4 +1,4 @@
-from app import app
+from app import app, login_manager
 from app.forms import LoginForm, RequestResetForm, ChangePasswordForm
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from app.util.email import generateToken, decodeToken, sendEmail
@@ -8,6 +8,10 @@ from app.models import Snippet, User
 from flask_login import current_user, login_required, logout_user, login_user
 
 user = Blueprint('user', __name__)
+
+@login_manager.user_loader
+def load_user(id):
+    return User.query.get(int(id))
 
 @user.route('/u/<path:username>/')
 def snippets(username):

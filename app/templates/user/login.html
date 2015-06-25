@@ -2,7 +2,7 @@
 {% block content %}
 <div class="row">
 	<div class="col-md-offset-4 col-md-4">
-		<form method="post" action="/login/">
+		<form method="post" action="{{ url_for('user.login') }}">
 			{{ form.csrf_token }}
 			<div class="form-group">
 			{{ form.username.label }}:
@@ -28,7 +28,7 @@
 				<input type="submit" value="Log In" class="btn btn-default btn-block" />
 			</div>
 			<div class="text-center">
-				Forgot your password? <a href="{{ url_for('request_reset') }}">Click Here.</a>
+				Forgot your password? <a href="{{ url_for('user.request_reset') }}">Click Here.</a>
 			</div>
 		</form>
 	</div>
