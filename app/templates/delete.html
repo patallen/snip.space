@@ -6,7 +6,7 @@
 <form action="{{ url_for('delete_snippet', snippet_uuid=snippet.get_uuid()) }}" method="POST">
 	{{ form.csrf_token }}
 	{{ form.delete(class="btn btn-danger") }}
-	<a class="btn btn-warning" href="{{ url_for('user_page', username=current_user.username) }}">No, abort.</a>
+	<a class="btn btn-warning" href="{{ url_for('user.snippets', username=current_user.username) }}">No, abort.</a>
 </form>
 </div>
 {% endblock %}

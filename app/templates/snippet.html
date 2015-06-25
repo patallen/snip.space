@@ -15,7 +15,7 @@
 		<div class="snippet-info col-sm-6">
 			<small>Created by: 
 				{% if snippet.user %}
-					<a href="{{url_for('user_page', username=snippet.user) }}">{{ snippet.user }}</a> 
+					<a href="{{url_for('user.snippets', username=snippet.user) }}">{{ snippet.user }}</a> 
 					{% else %}Anonymous{% endif %} | Views: {{ snippet.hits }} | Created on: {{ snippet.date_added.strftime('%b %d, %Y') }} | Syntax: {{ snippet.language.display_text }}</small>
 		</div>
 		<div class="snippet-options col-md-6 pull-right">

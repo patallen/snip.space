@@ -33,7 +33,7 @@
 		{% set direction = 'asc' %}
 	{% endif %}
 
-	<a {{ css }}href="{{ url_for('user_page',
+	<a {{ css }}href="{{ url_for('user.snippets',
 						username=user.username,
 						sort=field,
 						dir=direction) }}">{{ name }}</a>

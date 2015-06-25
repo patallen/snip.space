@@ -23,7 +23,7 @@
 			</ul>
 			{% else %}
 			<ul class="nav navbar-nav navbar-right">
-				{{ items.navlink('u', 'user_page', 'My Snippets', username=current_user.username) }}
+				{{ items.navlink('u', 'user.snippets', 'My Snippets', username=current_user.username) }}
 				{{ items.navlink('settings', 'user_settings', 'Settings') }}
 				{{ items.navlink('logout', 'logout', 'Logout') }}
 			</ul>

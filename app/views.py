@@ -130,48 +130,8 @@ def delete_snippet(snippet_uuid):
     if form.validate_on_submit():
         db.session.delete(snippet)
         db.session.commit()
-        return redirect(url_for('user_page', username=current_user.username))
+        return redirect(url_for('user.snippets', username=current_user.username))
     return render_template('delete.html', form=form, snippet=snippet) 
-
-
-@app.route('/u/<path:username>/')
-def user_page(username):
-    """Route returns snippets and their info for
-    snippets created by specified user"""
-    user = getUserByUsername(username)
-
-    # set order_by variables based on querystring
-    direction = request.args.get('dir', 'asc')
-    field = request.args.get('sort', 'date')
-
-    # set page to 1 in case it wasn't specified
-    page = 1
-    if request.args.get('page'):
-        page = request.args.get('page')
-   
-    # set base query for user's snippets
-    snipQuery = Snippet.query.filter(Snippet.user == user)
-    if current_user != user:
-        snipQuery = snipQuery.filter(Snippet.private == False)
-
-    # ensure direction and field are valid
-    if field not in ('date', 'title', 'views', 'syntax'):
-        field = 'title'
-    else:
-        if field == 'date':
-            field = 'date_added'
-        if field == 'views':
-            field = 'hits'
-        if field == 'syntax':
-            field = 'language_id'
-    if direction not in ('desc', 'asc'):
-        direction = 'asc'
-
-    sort_by = '{} {}'.format(field, direction)
-    snipQuery = snipQuery.order_by(sort_by)
-
-    snippets = snipQuery.paginate(int(page), app.config['SNIPPETS_PER_PAGE'], False)
-    return render_template('user.html', user=user, snippets=snippets)
 
 
 @app.route('/settings/', methods=['GET', 'POST'])
