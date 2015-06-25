@@ -31,7 +31,7 @@ def index():
         snippet_form.language.default = current_user.default_language_id
         snippet_form.process()
 
-    return render_template('index.html', form=snippet_form)
+    return render_template('snippets/compose.html', form=snippet_form)
 
 
 @app.route('/<path:snippet_uuid>/')
@@ -47,7 +47,7 @@ def show_snippet(snippet_uuid):
     db.session.add(snippet)
     db.session.commit()
 
-    return render_template('snippet.html', snippet=snippet)
+    return render_template('snippets/view.html', snippet=snippet)
 
 
 @app.route('/<path:snippet_uuid>/edit/', methods=['GET', 'POST'])
@@ -80,7 +80,7 @@ def edit_snippet(snippet_uuid):
     snippet_form.private.default = snippet.is_private()
     snippet_form.process()
 
-    return render_template('index.html', form=snippet_form, snippet=snippet)   
+    return render_template('snippets/compose.html', form=snippet_form, snippet=snippet)   
 
 
 @app.route('/<path:snippet_uuid>/r/')
@@ -125,7 +125,7 @@ def delete_snippet(snippet_uuid):
         db.session.delete(snippet)
         db.session.commit()
         return redirect(url_for('user.snippets', username=current_user.username))
-    return render_template('delete.html', form=form, snippet=snippet)
+    return render_template('snippets/delete.html', form=form, snippet=snippet)
 
 
 @app.route('/popular/')
@@ -153,7 +153,7 @@ def popular_snippets():
                        .paginate(int(page),
                                  app.config['SNIPPETS_PER_PAGE'],
                                  False)
-    return render_template('recent_snippets.html',
+    return render_template('snippets/list.html',
                             snippets=snippets,
                             view='Popular')
 
@@ -175,6 +175,6 @@ def recent_snippets():
     snippets = snippets.paginate(int(page),
                                  app.config['SNIPPETS_PER_PAGE'],
                                  False)
-    return render_template('recent_snippets.html',
+    return render_template('snippets/list.html',
                             snippets=snippets,
                             view='Recent')
