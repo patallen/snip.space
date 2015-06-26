@@ -15,11 +15,13 @@ An ad-free, free, and open source user-based code snippet/text respository. Sign
 1. To run server: `python manage.py runserver`
 
 ## TODO:
-- [ ] Popular Snippets timeframe macro
+- [ ] Fork Snippet Functionality
 - [ ] Admin portal
 - [ ] User settings page (started)
 - [ ] Report snippet functionality
 - [ ] Statistics page
+- [x] Popular Snippets timeframe macro
+- [x] Implement Blueprints
 - [x] Trending/Popular by timeframe page
 - [x] Remove flash message redundancy
 - [x] Password reset functionality
