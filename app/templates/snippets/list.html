@@ -12,14 +12,22 @@
 <table class="table table-striped">
 	<thead>
 		<th class="col-sm-6">Title</th>
+		<th>User</th>
 		<th>Date Added</th>
-		<th class="col-sm-2">Syntax</th>
-		<th class="col-sm-1">Views</th>
+		<th>Syntax</th>
+		<th>Views</th>
 	</thead>
 	<tbody>
 		{% for snippet in snippets.items%}
 		<tr>
 			<td><a href="{{ url_for('snippets.show_snippet', snippet_uuid=snippet.get_uuid()) }}" >{{ snippet.title }}</a></td>
+			<td>
+				{%- if snippet.user -%}
+				<a href="{{ url_for('user.snippets', username=snippet.user.username) }}">{{ snippet.user.username }}</a>
+				{%- else -%}
+				Anonymous
+				{%- endif -%}
+			</td>
 			<td>{{ snippet.date_added.strftime('%b %d, %Y') }}</td>
 			<td>{{ snippet.language }}</td>
 			<td>{{ snippet.hits }}</td>
