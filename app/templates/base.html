@@ -7,6 +7,8 @@
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+		{% block css %}
+		{% endblock %}
 	</head>
 	<body class="main">
 	<nav class="navbar navbar-inverse navbar-static-top">

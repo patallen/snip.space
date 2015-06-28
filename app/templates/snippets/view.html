@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% block css %}
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+{% endblock %}
 {% block content %}
 
 	<div class="row">
@@ -40,12 +43,18 @@
 		<div class="col-sm-4 options-container">
 			<div class="input-group">
 				<span class="input-group-addon">Share:</span>
-				<input disabled class="form-control" type="text" value="http://snip.space/{{ snippet.get_uuid() }}" />
+				<input disabled id="copy-me" class="form-control" type="text" value="http://snip.space/{{ snippet.get_uuid() }}" />
+				<span class="input-group-btn">
+					<button class="btn btn-primary" type="button" data-clipboard-target="copy-me" id="copy-button">Copy</button>
+				</span>
 			</div>
 		</div>
 	</div>
 	{% block scripts %}
 	{{ super() }}
+	<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+	<script src="{{ url_for('static', filename='js/ZeroClipboard.min.js') }}"></script>
 	{% if snippet.language.id == 'htmlmixed' %}
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/mode/xml/xml.min.js"></script>
 	{% endif %}
@@ -53,6 +62,14 @@
 	{% endblock %}
 	<script>
 	window.onload = function () {
+		ZeroClipboard.config( { swfPath: '{{ url_for('static', filename="js/ZeroClipboard.swf") }}'} );
+		var client = new ZeroClipboard(document.getElementById('copy-button'));
+
+		client.on( "ready", function( readyEvent ){
+			client.on( "aftercopy", function( event ){
+				toastr.success('Copied to Clipboard!');
+			});
+		});
   
 	    var editableCodeMirror = CodeMirror.fromTextArea(document.getElementById('snippet_readonly'), {
 			mode: "{{ snippet.language.id }}",
