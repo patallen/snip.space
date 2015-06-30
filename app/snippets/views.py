@@ -183,3 +183,8 @@ def recent_snippets():
     return render_template('snippets/list.html',
                            snippets=snippets,
                            view='Recent')
+
+@snippets.route('/about/')
+def about():
+    """Route displays the static about page"""
+    return render_template('public/about.html')
