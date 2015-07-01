@@ -1,6 +1,9 @@
 ## snip.space
 An ad-free, free, and open source user-based code snippet/text respository. Sign up and keep track of and share all of your random snippets.
 
+Check out the live version of the site at [snip.space](https;//snip.space/).
+
+
 ## Instructions
 1. Clone the repository `git clone https://github.com/patallen/snip.space.git`
 1. Create a python 2.7 virtualenv in main directory: `virtualenv venv`
