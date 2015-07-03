@@ -142,8 +142,8 @@ def ajax_delete():
     if current_user == snippet.user:
         db.session.delete(snippet)
         db.session.commit()
-        return 'OK'
-    return 'FAIL'
+        return Response('Delete Successful.', status=200) 
+    return Response('Delete Unsuccessful.', status=401) 
 
 
 @snippets.route('/popular/')
