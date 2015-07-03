@@ -135,6 +135,17 @@ def delete_snippet(snippet_uuid):
     return render_template('snippets/delete.html', form=form, snippet=snippet)
 
 
+@snippets.route('/ajaxdelete', methods=['POST'])
+def ajax_delete():
+    snip_uuid = request.form.get('snip_uuid', None)
+    snippet = get_snippet_by_uuid(snip_uuid)
+    if current_user == snippet.user:
+        db.session.delete(snippet)
+        db.session.commit()
+        return 'OK'
+    return 'FAIL'
+
+
 @snippets.route('/popular/')
 def popular_snippets():
     """Route shows popular snippets based on the

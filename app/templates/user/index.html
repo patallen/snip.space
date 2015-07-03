@@ -29,7 +29,7 @@
 			{% if current_user == user %}
 			<td class="text-center">
 				<a href="{{ url_for('snippets.edit_snippet', snippet_uuid=snippet.get_uuid()) }}"><i class="fa fa-pencil"></i></a> | 
-				<a href="{{ url_for('snippets.delete_snippet', snippet_uuid=snippet.get_uuid()) }}"><i class="fa fa-trash"></i></a>
+				<a data-id="{{ snippet.get_uuid() }}" id="delete-snip-btn" href="/"><i class="fa fa-trash"></i></a>
 			</td>
 			{% endif %}
 		</tr>
@@ -47,4 +47,8 @@
 	This user currently has no public snippets.
 	{% endif %}
 {% endif %}
+{% endblock %}
+{% block scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="{{ url_for('static', filename='js/delete.js') }}"></script>
 {% endblock %}
