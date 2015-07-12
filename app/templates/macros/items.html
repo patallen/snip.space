@@ -48,7 +48,7 @@
 	<ul class="pagination">
 		{% if page_obj.has_prev %}
 		<li>
-			<a href="{{ url_for(request.endpoint, page=page_obj.prev_num, **args) }}"><span aria-hidden="true">&laquo;</span></a>
+			<a href="{{ url_for_page(request, page_obj.prev_num) }}"><span aria-hidden="true">&laquo;</span></a>
 		</li>
 		{% else %}
 		<li class="disabled">
@@ -59,7 +59,7 @@
 			{% if page %}
 			<li>
 				{% if page != snippets.page %}
-					<a href="{{ url_for(request.endpoint, page=page, **args) }}">{{ page }}</a>
+					<a href="{{ url_for_page(request, page) }}">{{ page }}</a>
 				{% else %}
 			<li class="active">
 				<a href="">{{ page }}</a>
@@ -72,7 +72,7 @@
 		{% endfor %}
 		{% if page_obj.has_next %}
 		<li>
-			<a href="{{ url_for(request.endpoint, page=page_obj.next_num, **args) }}"><span aria-hidden="true">&raquo;</span></a>
+			<a href="{{ url_for_page(request, page_obj.next_num) }}"><span aria-hidden="true">&raquo;</span></a>
 		</li>
 		{% else %}
 		<li class="disabled">

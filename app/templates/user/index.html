@@ -2,6 +2,7 @@
 {% block content %}
 <h3>Snippets by <em>{{ user.username }}</em></h3>
 {% if snippets.items %}
+{{ request.view_args.copy() }}
 <table class="table table-striped table-condensed">
 	<thead>
 		<th class="col-sm-6">{{ items.sort('title', 'Title') }}</th>
