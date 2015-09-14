@@ -1,7 +1,7 @@
 ## snip.space
 An ad-free, free, and open source user-based code snippet/text respository. Sign up and keep track of and share all of your random snippets.
 
-Check out the live version of the site at [snip.space](https;//snip.space/).
+Check out the live version of the site at [snip.space](http://snip.space/).
 
 
 ## Instructions
@@ -13,8 +13,8 @@ Check out the live version of the site at [snip.space](https;//snip.space/).
 	- Place outside of project dir: ex `~/settings/snipspace.py`
 	- `export SNIPSPACE_SETTINGS=~/settings/snipspace.py`
 1. `python manage.py db upgrade`
-1. Seed database `python manage.py seed`
-1. Create superuser `python manage.py createsuperuser`
+1. Seed database: `python manage.py seed`
+1. Create superuser: `python manage.py createsuperuser`
 1. To run server: `python manage.py runserver`
 
 ## TODO:
