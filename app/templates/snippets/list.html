@@ -35,5 +35,7 @@
 		{% endfor %}
 	</tbody>
 </table>
+{% if snippets.items %}
 {{ items.paginate(snippets) }}
+{% endif %}
 {% endblock %}
