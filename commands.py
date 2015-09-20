@@ -64,7 +64,7 @@ class SeedDatabase(Command):
             db.session.add(lang)
         except:
             lang = Language(id, display, ext)
-            db.session.add(lang)               
+            db.session.add(lang)
 
     def run(self):
         for lang in languages:

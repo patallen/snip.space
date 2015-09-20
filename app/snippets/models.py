@@ -16,6 +16,11 @@ class Snippet(db.Model):
     language = db.relationship('Language')
     date_added = db.Column(db.DateTime)
 
+    parent_fork_id = db.Column(db.Integer, db.ForeignKey('snippet.id'))
+    parent_fork = db.relationship('Snippet',
+                                  backref=db.backref('forks', lazy='dynamic'),
+                                  remote_side='Snippet.id')
+
     def __init__(self, body):
         self.body = body
         self.date_added = datetime.datetime.utcnow()
