@@ -21,10 +21,10 @@ Check out the live version of the site at [snip.space](http://snip.space/).
 - [ ] ToS
 - [ ] Privacy Policy
 - [ ] Track anonymous users
-- [ ] Fork Snippet Functionality
 - [ ] Admin portal
 - [ ] Report snippet functionality
 - [ ] Statistics page
+- [x] Fork Snippet Functionality
 - [x] About page
 - [x] Popular Snippets timeframe macro
 - [x] User settings page (started)

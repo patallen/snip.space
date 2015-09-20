@@ -54,6 +54,23 @@ def show_snippet(snippet_uuid):
     return render_template('snippets/view.html', snippet=snippet)
 
 
+@snippets.route('/<path:snippet_uuid>/fork/')
+@login_required
+def fork_snippet(snippet_uuid):
+    to_fork = get_snippet_by_uuid(snippet_uuid)
+    if to_fork.is_private() and to_fork.user != current_user:
+        raise Unauthorized("This snippet is private.")
+    new_snippet = Snippet(to_fork.body)
+    new_snippet.title = to_fork.title
+    new_snippet.language = to_fork.language
+    new_snippet.parent_fork = to_fork
+    new_snippet.user = current_user
+    db.session.add(new_snippet)
+    db.session.commit()
+    return redirect(url_for('snippets.show_snippet',
+                            snippet_uuid=new_snippet.get_uuid()))
+
+
 @snippets.route('/<path:snippet_uuid>/edit/', methods=['GET', 'POST'])
 @login_required
 def edit_snippet(snippet_uuid):
