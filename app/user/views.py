@@ -66,6 +66,7 @@ def login():
     """Log in users if they are registered and confirmed,
     provided they supply the correct password"""
     login_form = LoginForm()
+    next_url = request.args.get('next', url_for('snippets.index'))
 
     if login_form.validate_on_submit():
         username = login_form.username.data
@@ -78,7 +79,7 @@ def login():
             flash('You must confirm your email before logging in.', 'danger')
         else:
             login_user(registered_user)
-            return redirect(url_for('snippets.index'))
+            return redirect(next_url)
         return redirect(url_for('user.login'))
 
     return render_template('user/login.html', form=login_form)

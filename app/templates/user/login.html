@@ -2,7 +2,7 @@
 {% block content %}
 <div class="row">
 	<div class="col-md-offset-4 col-md-4">
-		<form method="post" action="{{ url_for('user.login') }}">
+		<form method="post">
 			{{ form.csrf_token }}
 			<div class="form-group">
 			{{ form.username.label }}:
