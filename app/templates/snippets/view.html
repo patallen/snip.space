@@ -22,7 +22,7 @@
 					{% else %}Anonymous{% endif %} | Views: {{ snippet.hits }} | Created on: {{ snippet.date_added.strftime('%b %d, %Y') }} | Syntax: {{ snippet.language.display_text }} | Forked: {{ snippet.forks.count() }}</small>
 		</div>
 		<div class="snippet-options col-md-6 pull-right">
-			<a href="fork">Fork It!</a> | <a href="r">Raw Text</a> | <a href="d">Download</a> |  <a href="/report/{{ snippet.id }}">Report</a> 
+			{% if current_user.is_authenticated() %}<a href="fork">Fork It!</a> |{% endif %} <a href="r">Raw Text</a> | <a href="d">Download</a> |  <a href="/report/{{ snippet.id }}">Report</a> 
 		</div>
 	</div>
 	<div class="row">
