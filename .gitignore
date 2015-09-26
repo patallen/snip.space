@@ -2,3 +2,4 @@ venv
 *.pyc
 *.db
 __pycache__
+app/static/components

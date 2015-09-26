@@ -1,0 +1,23 @@
+{
+  "name": "snip.space",
+  "version": "0.0.0",
+  "homepage": "https://github.com/patallen/snip.space",
+  "authors": [
+    "Patrick Allen <prallen90@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "codemirror": "~5.7.0"
+  }
+}
