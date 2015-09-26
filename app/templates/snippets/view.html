@@ -22,7 +22,7 @@
 					{% else %}Anonymous{% endif %} | Views: {{ snippet.hits }} | Created on: {{ snippet.date_added.strftime('%b %d, %Y') }} | Syntax: {{ snippet.language.display_text }} | Forked: {{ snippet.forks.count() }}</small>
 		</div>
 		<div class="snippet-options col-md-6 pull-right">
-			{% if current_user.is_authenticated() %}<a href="fork">Fork It!</a> |{% endif %} <a href="r">Raw Text</a> | <a href="d">Download</a> |  <a href="/report/{{ snippet.id }}">Report</a> 
+			<a href="fork">Fork It!</a> | <a href="r">Raw Text</a> | <a href="d">Download</a> |  <a href="/report/{{ snippet.id }}">Report</a> 
 		</div>
 	</div>
 	<div class="row">
@@ -55,13 +55,14 @@
 	<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 	<script src="{{ url_for('static', filename='js/ZeroClipboard.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='components/codemirror/addon/mode/loadmode.js') }}"></script>
+	<script src="{{ url_for('static', filename='components/codemirror/mode/meta.js') }}"></script>
 	{% if snippet.language.id == 'htmlmixed' %}
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/mode/xml/xml.min.js"></script>
 	{% endif %}
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/mode/{{ snippet.language.id }}/{{ snippet.language.id }}.min.js"></script>
 	{% endblock %}
 	<script>
 	window.onload = function () {
+		CodeMirror.modeURL = "/static/components/codemirror/mode/%N/%N.js";
 		ZeroClipboard.config( { swfPath: '{{ url_for('static', filename="js/ZeroClipboard.swf") }}'} );
 		var client = new ZeroClipboard(document.getElementById('copy-button'));
 
@@ -72,12 +73,15 @@
 		});
 
 	    var editableCodeMirror = CodeMirror.fromTextArea(document.getElementById('snippet_readonly'), {
+			path: "static/components/codemirror",
 			mode: "{{ snippet.language.id }}",
 	        theme: "default",
 	        lineNumbers: true,
 	        readOnly: true
 	    });
 	    editableCodeMirror.setSize('100%', 400); 
+	    editableCodeMirror.setOption('mode','{{ snippet.language.id }}'); 
+	    CodeMirror.autoLoadMode(editableCodeMirror, '{{ snippet.language.id }}'); 
 	};
 	</script>
 {% endblock %}
