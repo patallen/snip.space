@@ -6,7 +6,8 @@ Check out the live version of the site at [snip.space](http://snip.space/).
 
 ## Instructions
 1. Clone the repository `git clone https://github.com/patallen/snip.space.git`
-1. Create a python 2.7 virtualenv in main directory: `virtualenv venv`
+1. Create a python 2.7 virtualenv in main directory: `mkvirtualenv snipspace`
+1. `$ bower install `
 1. Install python dependencies: `pip install -r requirements.txt`
 1. Create postgres database
 1. Create settings file based off of default_settings.py
